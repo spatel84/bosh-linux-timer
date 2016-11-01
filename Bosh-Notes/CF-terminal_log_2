@@ -1,0 +1,762 @@
+shilpen@shilpen-All-Series:~$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+udev            3.8G     0  3.8G   0% /dev
+tmpfs           768M  9.5M  758M   2% /run
+/dev/sdb6        29G  5.7G   21G  22% /
+tmpfs           3.8G  188K  3.8G   1% /dev/shm
+tmpfs           5.0M  4.0K  5.0M   1% /run/lock
+tmpfs           3.8G     0  3.8G   0% /sys/fs/cgroup
+/dev/sdb8       6.5G  8.8M  6.1G   1% /tmp
+/dev/sdb9        29G   18G  9.2G  66% /home
+tmpfs           768M   52K  768M   1% /run/user/1000
+/dev/sdc1        30G   28G  2.1G  94% /media/shilpen/PENDRIVE1
+shilpen@shilpen-All-Series:~$ which ruby
+/usr/bin/ruby
+shilpen@shilpen-All-Series:~$ rvm
+= rvm
+
+* https://rvm.io/
+* https://github.com/rvm/rvm/
+
+== DESCRIPTION:
+
+RVM is the Ruby enVironment Manager (rvm).
+
+It manages Ruby application environments and enables switching between them.
+
+== Installation
+
+  curl -L https://get.rvm.io | bash -s stable --autolibs=enabled [--ruby] [--rails] [--trace]
+
+stable     :: Install stable RVM, good for servers.
+--ruby     :: Additionally install latest ruby version (MRI).
+--rails    :: Install gem rails into default gemset (also installs ruby=).
+--trace    :: Print trace of the installation, gist output when you have problems.
+--autolibs :: Enable or disable autolibs see: https://rvm.io/rvm/autolibs
+
+More details here: https://rvm.io/rvm/install/
+
+== Usage
+
+  rvm [Flags] [Options] Action [Implementation[,Implementation[,...]]
+
+== Flags
+
+--default         :: with 'rvm use X', sets the default ruby for new shells to X.
+--debug           :: Toggle debug mode on for very verbose output.
+--disable-binary  :: Install from source instead of using binaries
+--trace           :: Toggle trace mode on to see EVERYTHING rvm is doing.
+--force           :: Force install, removes old install & source before install.
+--summary         :: Used with rubydo to print out a summary of the commands run.
+--latest          :: with gemset --dump skips version strings for latest gem.
+--gems            :: with uninstall/remove removes gems with the interpreter.
+--docs            :: with install, attempt to generate ri after installation.
+--reconfigure     :: Force ./configure on install even if Makefile already exists.
+--skip-gemsets    :: with install, skip the installation of default gemsets.
+--quiet-curl      :: Makes curl silent when fetching data
+--64              :: Option for installing 64-bit Rubies (default behavior)
+--32              :: Option for installing 32-bit Rubies
+
+== Options
+
+-v|--version     :: Emit rvm version loaded for current shell
+-l|--level       :: patch level to use with rvm use / install
+   --bin         :: path for binaries to be placed (~/.rvm/bin/)
+-S               :: Specify a script file to attempt to load and run (rubydo)
+-e               :: Execute code from the command line.
+--gems           :: Used to set the 'gems_flag', use with 'remove' to remove
+                    gems
+--archive        :: Used to set the 'archive_flag', use with 'remove' to remove
+                    archive
+--patch          :: With MRI Rubies you may specify one or more full paths to
+                    patches
+
+                    for multiple, specify comma separated:
+
+                      --patch /.../.../a.patch[%prefix],/.../.../.../b.patch
+
+                    'prefix' is an optional argument, which will be bypassed
+                    to the '-p' argument of the 'patch' command. It is separated
+                    from patch file name with '%' symbol.
+-C|--configure   :: custom configure options. If you need to pass several
+                    configure options then append them comma separated:
+
+                      -C --...,--...,--...
+
+--nice           :: process niceness (for slow computers, default 0)
+--ree-options    :: Options passed directly to ree's './installer' on the
+                    command line.
+--with-rubies    :: Specifies a string for rvm to attempt to expand for set
+                    operations.
+
+== Action
+
+(Note: for most actions, 'rvm help action-name' may provide more information.)
+
+*usage*     :: show this usage information
+version     :: show the rvm version installed in rvm_path
+use         :: setup current shell to use a specific ruby version
+reload      :: reload rvm source itself (useful after changing rvm source)
+implode     :: (seppuku) removes the rvm installation completely.
+
+               This means everything in $rvm_path (~/.rvm || /usr/local/rvm).
+
+               This does not touch your profiles. However, this means that you
+               must manually clean up your profiles and remove the lines which
+               source RVM.
+get         :: {head,stable} upgrades rvm to latest head or stable version.
+
+               Check 'rvm help get' for more details.
+
+               (If you experience bugs try this first with head version, then
+               ask for help in #rvm on irc.freenode.net and hang around)
+reset       :: remove current and stored default & system settings.
+
+               (If you experience odd behavior try this second)
+info        :: show the *current* environment information for current ruby
+current     :: print the *current* ruby version and the name of any gemset
+               being used.
+debug       :: show info plus additional information for common issues
+
+install     :: install one or many ruby versions
+
+               See also: https://rvm.io/rubies/installing/
+uninstall   :: uninstall one or many ruby versions, leaves their sources
+remove      :: uninstall one or many ruby versions and remove their sources
+reinstall   :: reinstall ruby and runs gem pristine on all gems,
+               make sure to read output, use 'all' for all rubies.
+
+migrate     :: Lets you migrate all gemsets from one ruby to another.
+upgrade     :: Lets you upgrade from one version of a ruby to another, including
+               migrating your gemsets semi-automatically.
+
+wrapper     :: generates a set of wrapper executables for a given ruby with the
+               specified ruby and gemset combination. Used under the hood for
+               passenger support and the like.
+
+cleanup     :: Lets you remove stale source folders / archives and other
+               miscellaneous data associated with rvm.
+repair      :: Lets you repair parts of your environment e.g. wrappers, env
+               files and similar files (e.g. general maintenance).
+fix-permissions :: Repairs broken permissions (e.g. by sudo or chef)
+osx-ssl-certs :: Helps update certificates for OpenSSL installed by rvm on OSX.
+snapshot    :: Lets you backup / restore an rvm installation in a lightweight
+               manner.
+
+alias       :: Lets you set shortcut strings for convenience with 'rvm use'.
+disk-usage  :: Tells you how much disk space rvm install is using.
+tools       :: Provides general information about the ruby environment,
+               primarily useful when scripting rvm.
+docs        :: Tools to make installing ri and rdoc documentation easier.
+rvmrc       :: Tools related to managing rvmrc trust and loading.
+patchset    :: Tools related to managing ruby patchsets.
+
+do          :: runs an arbitrary command against specified and/or all rubies
+cron        :: Manages setup for using ruby in cron tasks.
+
+gemset      :: gemsets: https://rvm.io/gemsets/
+
+rubygems    :: Switches the installed version of rubygems for the current ruby.
+
+config-get  :: display values for RbConfig::CONFIG variables.
+gemdir      :: display the path to the current gem directory (GEM_HOME).
+
+
+fetch       :: Performs an archive / src fetch only of the selected ruby.
+list        :: show currently installed rubies, interactive output.
+
+               https://rvm.io/rubies/list/
+autolibs    :: Controls settings for automatically installing dependencies.
+pkg         :: Install a dependency package {readline,iconv,zlib,openssl}
+
+               https://rvm.io/packages/
+notes       :: Display notes, with operating system specifics.
+
+export      :: Temporarily set an environment variable in the current shell.
+unexport    :: Undo changes made to the environment by 'rvm export'.
+requirements  :: Installs additional OS specific dependencies/requirements for
+                 building various rubies. Usually run by install.
+mount       :: Install rubies from external locations.
+
+user        :: Tools for managing RVM mixed mode in multiuser installations.
+group       :: Tools for managing groups in multiuser installations.
+
+== Implementation
+
+*ruby*     :: MRI/YARV Ruby (The Gold Standard) {1.8.x, 1.9.x, 2.0.x, 2.1.x, 2.2.x}
+jruby      :: JRuby, Ruby interpreter on the Java Virtual Machine.
+rbx        :: Rubinius
+ree        :: Ruby Enterprise Edition, MRI Ruby with several custom
+              patches for performance, stability, and memory.
+macruby    :: MacRuby, insanely fast, can make real apps (Mac OS X Only).
+maglev     :: GemStone Ruby, awesome persistent ruby object store.
+ironruby   :: IronRuby, NOT supported yet. Looking for volunteers to help.
+system     :: use the system ruby (eg. pre-rvm state)
+default    :: use the default ruby (or the system ruby if a default hasn't been set).
+
+              https://rvm.io/rubies/default/
+
+== Resources:
+
+https://rvm.io/
+https://www.pivotaltracker.com/projects/26822
+
+== Contributions:
+
+Any and all contributions offered in any form, past present or future, to the
+RVM project are understood to be in complete agreement and acceptance with the
+Apache License v2.0.
+
+== LICENSE:
+
+Copyright (c) 2009-2011 Wayne E. Seguin
+Copyright (c) 2011-2016 Michal Papis
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+  Action documentation available with 'rvm help action-name':
+
+      alias autolibs cleanup config-get cron current debug disk-usage do docs fetch fix-permissions gemdir gemset gemset/copy get group implode info install list migrate mount notes osx-ssl-certs patchset pkg prepare reinstall remove repair requirements reset rubygems rvmrc rvmrc/to rvmrc/warning snapshot srcdir tools uninstall upgrade use user wrapper 
+
+  Other topics of documentation available with 'rvm help topic':
+
+      alt color upgrade-notes 
+  
+
+  For additional information please visit RVM's documentation website:
+
+      https://rvm.io/
+
+  If you still cannot find an answer to your question, find
+  'wayneeseguin', 'mpapis', 'richo', 'lemoinem' or 'rys' in #rvm on irc.freenode.net:
+
+      http://webchat.freenode.net/?channels=rvm
+  
+shilpen@shilpen-All-Series:~$ rvm list known
+# MRI Rubies
+[ruby-]1.8.6[-p420]
+[ruby-]1.8.7[-head] # security released on head
+[ruby-]1.9.1[-p431]
+[ruby-]1.9.2[-p330]
+[ruby-]1.9.3[-p551]
+[ruby-]2.0.0[-p648]
+[ruby-]2.1[.8]
+[ruby-]2.2[.4]
+[ruby-]2.3[.0]
+[ruby-]2.2-head
+ruby-head
+
+# for forks use: rvm install ruby-head-<name> --url https://github.com/github/ruby.git --branch 2.2
+
+# JRuby
+jruby-1.6[.8]
+jruby-1.7[.23]
+jruby[-9.0.5.0]
+jruby-head
+
+# Rubinius
+rbx-1[.4.3]
+rbx-2.3[.0]
+rbx-2.4[.1]
+rbx[-2.5.8]
+rbx-head
+
+# Opal
+opal
+
+# Minimalistic ruby implementation - ISO 30170:2012
+mruby[-head]
+
+# Ruby Enterprise Edition
+ree-1.8.6
+ree[-1.8.7][-2012.02]
+
+# GoRuby
+goruby
+
+# Topaz
+topaz
+
+# MagLev
+maglev[-head]
+maglev-1.0.0
+
+# Mac OS X Snow Leopard Or Newer
+macruby-0.10
+macruby-0.11
+macruby[-0.12]
+macruby-nightly
+macruby-head
+
+# IronRuby
+ironruby[-1.1.3]
+ironruby-head
+shilpen@shilpen-All-Series:~$ rvm install ruby-2.3.0
+Already installed ruby-2.3.0.
+To reinstall use:
+
+    rvm reinstall ruby-2.3.0
+
+shilpen@shilpen-All-Series:~$ rvm use 2.3.0
+
+RVM is not a function, selecting rubies with 'rvm use ...' will not work.
+
+You need to change your terminal emulator preferences to allow login shell.
+Sometimes it is required to use `/bin/bash --login` as the command.
+Please visit https://rvm.io/integration/gnome-terminal/ for an example.
+
+shilpen@shilpen-All-Series:~$ `/bin/bash --login`
+shilpen@shilpen-All-Series:~$ rvm use 2.3.0
+Warning! PATH is not properly set up, '/home/shilpen/.rvm/gems/ruby-2.3.0/bin' is not at first place,
+         usually this is caused by shell initialization files - check them for 'PATH=...' entries,
+         it might also help to re-add RVM to your dotfiles: 'rvm get stable --auto-dotfiles',
+         to fix temporarily in this shell session run: 'rvm use ruby-2.3.0'.
+shilpen@shilpen-All-Series:~$ rvm get stable --auto-dotfiles
+
+gpg: Signature made Thu 21 Jan 2016 19:38:21 GMT using RSA key ID BF04FF17
+gpg: Good signature from "Michal Papis (RVM signing) <mpapis@gmail.com>" [unknown]
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 409B 6B17 96C2 7546 2A17  0311 3804 BB82 D39D C0E3
+     Subkey fingerprint: 62C9 E5F4 DA30 0D94 AC36  166B E206 C29F BF04 FF17
+gpg: Signature made Tue 29 Mar 2016 14:49:47 BST using RSA key ID BF04FF17
+gpg: Good signature from "Michal Papis (RVM signing) <mpapis@gmail.com>" [unknown]
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 409B 6B17 96C2 7546 2A17  0311 3804 BB82 D39D C0E3
+     Subkey fingerprint: 62C9 E5F4 DA30 0D94 AC36  166B E206 C29F BF04 FF17
+In case of problems: https://rvm.io/help and https://twitter.com/rvm_io
+  * No new notes to display.
+
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ rvm use ruby-2.3.0
+shilpen@shilpen-All-Series:~$ which ruby
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ exit
+logout
+bash: Using: No such file or directory
+shilpen@shilpen-All-Series:~$ cd
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ 
+shilpen@shilpen-All-Series:~$ rvm use 2.3.0
+
+RVM is not a function, selecting rubies with 'rvm use ...' will not work.
+
+You need to change your terminal emulator preferences to allow login shell.
+Sometimes it is required to use `/bin/bash --login` as the command.
+Please visit https://rvm.io/integration/gnome-terminal/ for an example.
+
+shilpen@shilpen-All-Series:~$ rvm use 2.3.0
+
+RVM is not a function, selecting rubies with 'rvm use ...' will not work.
+
+You need to change your terminal emulator preferences to allow login shell.
+Sometimes it is required to use `/bin/bash --login` as the command.
+Please visit https://rvm.io/integration/gnome-terminal/ for an example.
+
+shilpen@shilpen-All-Series:~$ rvm use 2.3.0
+
+RVM is not a function, selecting rubies with 'rvm use ...' will not work.
+
+You need to change your terminal emulator preferences to allow login shell.
+Sometimes it is required to use `/bin/bash --login` as the command.
+Please visit https://rvm.io/integration/gnome-terminal/ for an example.
+
+shilpen@shilpen-All-Series:~$ /bin/bash --login
+shilpen@shilpen-All-Series:~$ rvm use ruby-2.3.0
+Warning! PATH is not properly set up, '/home/shilpen/.rvm/gems/ruby-2.3.0/bin' is not at first place,
+         usually this is caused by shell initialization files - check them for 'PATH=...' entries,
+         it might also help to re-add RVM to your dotfiles: 'rvm get stable --auto-dotfiles',
+         to fix temporarily in this shell session run: 'rvm use ruby-2.3.0'.
+Using /home/shilpen/.rvm/gems/ruby-2.3.0
+shilpen@shilpen-All-Series:~$ which ruby
+/home/shilpen/.rvm/rubies/ruby-2.3.0/bin/ruby
+shilpen@shilpen-All-Series:~$ ls
+Desktop                                            spiff
+Documents                                          Templates
+examples.desktop                                   terminal_log
+mongodb-mms-monitoring-agent_2.1.0.35-1_amd64.deb  Ubuntu One
+Music                                              Videos
+notes-bosh.txt                                     VirtualBox VMs
+Pictures                                           workspace
+Public
+shilpen@shilpen-All-Series:~$ cd workspace
+shilpen@shilpen-All-Series:~/workspace$ ls
+bosh-lite  HelloWorld  MongoWork  RobotMaze
+shilpen@shilpen-All-Series:~/workspace$ cd bosh-lite
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ ks
+ks: command not found
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ ls
+bin  ca  cf-release  ci  docs  LICENSE  packer  README.md  Vagrantfile
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ vagrant up --provider=virtualbox
+Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Checking if box 'cloudfoundry/bosh-lite' is up to date...
+==> default: Clearing any previously set forwarded ports...
+==> default: Clearing any previously set network interfaces...
+==> default: Preparing network interfaces based on configuration...
+    default: Adapter 1: nat
+    default: Adapter 2: hostonly
+==> default: Forwarding ports...
+    default: 22 (guest) => 2222 (host) (adapter 1)
+==> default: Running 'pre-boot' VM customizations...
+==> default: Booting VM...
+==> default: Waiting for machine to boot. This may take a few minutes...
+    default: SSH address: 127.0.0.1:2222
+    default: SSH username: vagrant
+    default: SSH auth method: private key
+==> default: Machine booted and ready!
+==> default: Checking for guest additions in VM...
+==> default: Setting hostname...
+==> default: Configuring and enabling network interfaces...
+==> default: Mounting shared folders...
+    default: /vagrant => /home/shilpen/workspace/bosh-lite
+==> default: Machine already provisioned. Run `vagrant provision` or use the `--provision`
+==> default: flag to force provisioning. Provisioners marked to run always will still run.
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh target 192.168.50.4 lite
+Target set to 'Bosh Lite Director'
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bin/add-route
++ old_ips=10.244.0.0/19
++ ips=10.244.0.0/16
++ gw=192.168.50.4
++ echo 'Adding the following route entry to your local route table to enable direct container access: 10.244.0.0/16 via 192.168.50.4. Your sudo password may be required.'
+++ uname
++ '[' Linux = Darwin ']'
+++ uname
++ '[' Linux = Linux ']'
++ type route
++ sudo route del -net 10.244.0.0/19 gw 192.168.50.4
+[sudo] password for shilpen: 
+SIOCDELRT: No such process
++ sudo route add -net 10.244.0.0/16 gw 192.168.50.4
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ vagrant suspend
+==> default: Saving VM state and suspending execution...
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh upload release
+System call error while talking to director: No route to host - connect(2) for "192.168.50.4" port 25555 (192.168.50.4:25555)
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh target
+Current target is https://192.168.50.4:25555 (Bosh Lite Director)
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh target
+Current target is https://192.168.50.4:25555 (Bosh Lite Director)
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ ping 192.168.50.4
+PING 192.168.50.4 (192.168.50.4) 56(84) bytes of data.
+From 192.168.50.1 icmp_seq=1 Destination Host Unreachable
+From 192.168.50.1 icmp_seq=2 Destination Host Unreachable
+From 192.168.50.1 icmp_seq=3 Destination Host Unreachable
+From 192.168.50.1 icmp_seq=4 Destination Host Unreachable
+From 192.168.50.1 icmp_seq=5 Destination Host Unreachable
+From 192.168.50.1 icmp_seq=6 Destination Host Unreachable
+From 192.168.50.1 icmp_seq=7 Destination Host Unreachable
+From 192.168.50.1 icmp_seq=8 Destination Host Unreachable
+From 192.168.50.1 icmp_seq=9 Destination Host Unreachable
+^C
+--- 192.168.50.4 ping statistics ---
+10 packets transmitted, 0 received, +9 errors, 100% packet loss, time 8999ms
+pipe 4
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ ping 192.168.50.4:25555
+ping: unknown host 192.168.50.4:25555
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh target https://192.168.50.4:25555
+Cannot talk to director at 'https://192.168.50.4:25555', please set correct target
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh target 192.168.50.4 lite
+Cannot talk to director at 'https://192.168.50.4:25555', please set correct target
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh target
+Current target is https://192.168.50.4:25555 (Bosh Lite Director)
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh target
+Current target is https://192.168.50.4:25555 (Bosh Lite Director)
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh target 192.168.50.4 lite
+Target set to 'Bosh Lite Director'
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh upload release
+Acting as user 'admin' on 'Bosh Lite Director'
+Sorry, your current directory doesn't look like release directory
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ ls
+bin  ca  cf-release  ci  docs  LICENSE  packer  README.md  Vagrantfile
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ cd cf-release
+shilpen@shilpen-All-Series:~/workspace/bosh-lite/cf-release$ ls
+blobs            dev_releases       Gemfile.lock  NOTICE     scripts
+bosh-lite        docs               githooks      packages   spec
+config           example_manifests  jobs          README.md  src
+CONTRIBUTING.md  Gemfile            LICENSE       releases   templates
+shilpen@shilpen-All-Series:~/workspace/bosh-lite/cf-release$ bosh upload releaseActing as user 'admin' on 'Bosh Lite Director'
+
+Copying packages
+----------------
+statsd-injector
+golang1.7
+python-buildpack
+nsync
+nats-common
+nats
+ruby-2.3
+cli
+uaa_utils
+postgres-9.4.9
+dea_next
+hm9000
+cloud_controller_ng
+postgres-common
+nginx_webdav
+stager
+route_registrar
+nginx_newrelic_plugin
+metron_agent
+doppler
+etcd-consistency-checker
+common
+consul
+nodejs-buildpack
+blobstore_url_signer
+uaa
+go-buildpack
+haproxy
+php-buildpack
+golang1.6
+smoke-tests
+ruby-2.1.8
+debian_nfs_server
+tps
+rootfs_cflinuxfs2
+gorouter
+collector
+ruby-buildpack
+etcd-dns-checker
+buildpack_java
+etcd
+loggregator_trafficcontroller
+loggregator_common
+warden
+libpq
+capi_utils
+acceptance-tests
+libmariadb
+nginx
+golang1.7-windows
+gnatsd
+syslog_drain_binder
+metron_agent_windows
+staticfile-buildpack
+etcd-common
+cc_uploader
+etcd_metrics_server
+routing_utils
+confab
+dea_logging_agent
+buildpack_java_offline
+ruby-2.2.5
+binary-buildpack
+
+
+Copying jobs
+------------
+statsd-injector
+python-buildpack
+java-offline-buildpack
+cloud_controller_worker
+nsync
+nats
+dea_next
+hm9000
+cloud_controller_ng
+blobstore
+stager
+nats_stream_forwarder
+route_registrar
+metron_agent
+doppler
+nodejs-buildpack
+uaa
+go-buildpack
+haproxy
+php-buildpack
+smoke-tests
+debian_nfs_server
+tps
+gorouter
+collector
+ruby-buildpack
+postgres
+etcd
+loggregator_trafficcontroller
+acceptance-tests
+syslog_drain_binder
+nfs_mounter
+java-buildpack
+metron_agent_windows
+staticfile-buildpack
+cc_uploader
+etcd_metrics_server
+cloud_controller_clock
+dea_logging_agent
+consul_agent
+binary-buildpack
+
+
+Copying license
+---------------
+license
+
+Generated /tmp/d20161026-6625-1ul537g/d20161026-6625-8faejl/release.tgz
+Release size: 2.4G
+
+Verifying manifest...
+Extract manifest                                             OK
+Manifest exists                                              OK
+Release name/version                                         OK
+
+
+Uploading release
+release.tgz:    96% |ooooooooooooooooooooooo |   2.3GB  28.7MB/s ETA:  00:00:03
+Director task 2
+  Started extracting release > Extracting release. Done (00:00:29)
+
+  Started verifying manifest > Verifying manifest. Done (00:00:00)
+
+  Started resolving package dependencies > Resolving package dependencies. Done (00:00:00)
+
+  Started creating new packages
+  Started creating new packages > statsd-injector/32056a79ed2528b5f307deb6af137a12242bb35a. Done (00:00:01)
+  Started creating new packages > golang1.7/48ce7b3927e6f7e6576fff21a7dc9d22b7ba9c62. Done (00:00:03)
+  Started creating new packages > python-buildpack/74ea078a8e7084f686cc9c0b16316003cf214890. Done (00:00:07)
+  Started creating new packages > nsync/8340a6b191c0702c5efad712f4a96b6f6e371df5. Done (00:00:03)
+  Started creating new packages > nats-common/1f712a21c0b1cbb3b547eccc79eb159aaee48b99. Done (00:00:01)
+  Started creating new packages > nats/9da10677048bd8c1237ae5f14ffe6be34ad16def. Done (00:00:02)
+  Started creating new packages > ruby-2.3/debd726c1edb8dea8654bb3c46539a4ee75bff75. Done (00:00:03)
+  Started creating new packages > cli/60a741596e7fc803f45c9628364b21d1b247550b. Done (00:00:00)
+  Started creating new packages > uaa_utils/20557445bf996af17995a5f13bf5f87000600f2e. Done (00:00:00)
+  Started creating new packages > postgres-9.4.9/8a20abd4ccec4d356cc29169d38be561d99bc1ff. Done (00:00:01)
+  Started creating new packages > dea_next/a04b381f4a37174b61681601cd04180c16c4874d. Done (00:00:00)
+  Started creating new packages > hm9000/7e2701aa5baa845503db0800ffc6f30e7bf90c38. Done (00:00:00)
+  Started creating new packages > cloud_controller_ng/8c1ec2491124e0bcde0a5f0d268ff02a4b1e722b. Done (00:00:00)
+  Started creating new packages > postgres-common/368d38d49a3cc717559ebcdb2390b68882a85053. Done (00:00:00)
+  Started creating new packages > nginx_webdav/ee1d48cbce7f78f1395b12837a500c11e5066fa7. Done (00:00:01)
+  Started creating new packages > stager/e14f9b90b2f10ea916e60766bc2131ed240cff35. Done (00:00:00)
+  Started creating new packages > route_registrar/0d3addc06d9d1244f55464033de5d64f1c30bdb7. Done (00:00:00)
+  Started creating new packages > nginx_newrelic_plugin/2de1c5ba9dec62be54c9ff4ed3b32a126463e0d8. Done (00:00:00)
+  Started creating new packages > metron_agent/c23eac93d8c8780326757d51f26b5ff17c223271. Done (00:00:00)
+  Started creating new packages > doppler/e579418676bbd5d1c8b37b12df0c226a1b7156c2. Done (00:00:00)
+  Started creating new packages > etcd-consistency-checker/3cf9e965c6a4d31ff80ac7cc15f06bfabce90601. Done (00:00:00)
+  Started creating new packages > common/0575b134322262f5213542d0db755f686c3994fd. Done (00:00:00)
+  Started creating new packages > consul/c114e20968d91e1095d4d3282265cc65ad98d9c6. Done (00:00:00)
+  Started creating new packages > nodejs-buildpack/92f3cdffbd04fb6e7cab22fb118c367d5a317f5e. Done (00:00:03)
+  Started creating new packages > blobstore_url_signer/f16ce779b8f82ac533ad4ebb13e05bf99077d5f7. Done (00:00:00)
+  Started creating new packages > uaa/f52080a83eece847ad7e20a4d6d970d9dff037f7. Done (00:00:06)
+  Started creating new packages > go-buildpack/a5b00102be424bff50b40929d134a61b147b7dd2. Done (00:00:14)
+  Started creating new packages > haproxy/f061c9f4854fab702991cf42653b9b09d711c9c1. Done (00:00:01)
+  Started creating new packages > php-buildpack/98c3c2392038d8b1b06a1c071425e2a4abf282e4. Done (00:00:18)
+  Started creating new packages > golang1.6/5dd4024894667ba7f647b883bbff25c04960e5c1. Done (00:00:01)
+  Started creating new packages > smoke-tests/47e703e4beeceb83691e6472644486980854a26a. Done (00:00:01)
+  Started creating new packages > ruby-2.1.8/0a758a4dc3408937b64f89aaa39f8ee25cce5454. Done (00:00:00)
+  Started creating new packages > debian_nfs_server/aac05f22582b2f9faa6840da056084ed15772594. Done (00:00:00)
+  Started creating new packages > tps/e19239db58fb91edb5f670e24ef793d266fd6544. Done (00:00:00)
+  Started creating new packages > rootfs_cflinuxfs2/0f191d74bad1c8d5a731bfd6f4fe2a9d6df26b42. Done (00:00:10)
+  Started creating new packages > gorouter/f62660d68c69d62589b5a35f0b0ccf113495c0ee. Done (00:00:01)
+  Started creating new packages > collector/9f8dfbcbcfffb124820327ad2ad4fee35e51d236. Done (00:00:03)
+  Started creating new packages > ruby-buildpack/4c7c98da755f37ce688ceb8c851ec2681ab16471. Done (00:00:15)
+  Started creating new packages > etcd-dns-checker/9676918944de93dd773b706cc7ecc68073492372. Done (00:00:00)
+  Started creating new packages > buildpack_java/1ade0d537179179833411f7497fde535fa7e1600. Done (00:00:00)
+  Started creating new packages > etcd/1fc907ba4fba3b6e0f59606dfa36108cf505abb4. Done (00:00:00)
+  Started creating new packages > loggregator_trafficcontroller/07cfc642ce53b757856fcae45793d92cc4175afa. Done (00:00:00)
+  Started creating new packages > loggregator_common/0fce24a169a51b745965d683f436121c2086c9bd. Done (00:00:00)
+  Started creating new packages > warden/7c3205a9b0a66ed816b1d2bd335139c888abb5c0. Done (00:00:00)
+  Started creating new packages > libpq/7e51aa75bcabc47002eccc38be269de63fc6df7d. Done (00:00:01)
+  Started creating new packages > capi_utils/f0746a954b2d4ab7bf905b8bc742584801e21357. Done (00:00:00)
+  Started creating new packages > acceptance-tests/920ace242a18d2bb69c00e26017ada6bb6be0d1e. Done (00:00:01)
+  Started creating new packages > libmariadb/90d7836132e02bb570d91f08c9e116c394888d75. Done (00:00:00)
+  Started creating new packages > nginx/b7c8aadb18d53f81a7455e447c5941313872b81d. Done (00:00:00)
+  Started creating new packages > golang1.7-windows/b179e460d5d151def77ad8cb43c4043736bba984. Done (00:00:02)
+  Started creating new packages > gnatsd/81f9a5debd447ad76ad55cae5b558a3a9a1dd1e1. Done (00:00:00)
+  Started creating new packages > syslog_drain_binder/a7ef8a45870b35b2b5d90d947b5441e02ccef02c. Done (00:00:00)
+  Started creating new packages > metron_agent_windows/557e7ddc6c316edd66fb325e2565763411ca48d2. Done (00:00:00)
+  Started creating new packages > staticfile-buildpack/bcc484648d025e0570ccb9da6fe6a402ac68ffb0. Done (00:00:00)
+  Started creating new packages > etcd-common/0f365b3a98184c2a6537efd51f67e8d5e9d2c486. Done (00:00:00)
+  Started creating new packages > cc_uploader/0719382143eaeea9fc4d9b6e94c890f821dc1799. Done (00:00:00)
+  Started creating new packages > etcd_metrics_server/e498285a38c9d86eac759e40c05af6ea77fe9456. Done (00:00:01)
+  Started creating new packages > routing_utils/91cf17318eb58c2a4840e7e4615453f6c78cee3c. Done (00:00:00)
+  Started creating new packages > confab/dd1d93d5d80f34203004a3a3439559a699211cf1. Done (00:00:00)
+  Started creating new packages > dea_logging_agent/6bb21f3a0fb68496973398568c26aae8bc4ee27a. Done (00:00:00)
+  Started creating new packages > buildpack_java_offline/1ef9be52c71df0a41e956ec0abc64954de5faa27. Done (00:00:08)
+  Started creating new packages > ruby-2.2.5/1471d078219e7aee8cb9c0ab1aefabbec561bfa7. Done (00:00:06)
+  Started creating new packages > binary-buildpack/fa621a71b4134c3ffc628c63d4ed583a3e193c21. Done (00:00:02)
+     Done creating new packages (00:01:57)
+
+  Started creating new jobs
+  Started creating new jobs > statsd-injector/7bb836cf603a4084493d1cc0bb5403b867c0dc15. Done (00:00:00)
+  Started creating new jobs > python-buildpack/c3ebd738c93c1dba9274c435022da84377f23639. Done (00:00:00)
+  Started creating new jobs > java-offline-buildpack/baba85203f19cb43788847dc5b06f4cb594e63fe. Done (00:00:00)
+  Started creating new jobs > cloud_controller_worker/2bf7b754bf937b31164ef821aa0396506e4761e2. Done (00:00:00)
+  Started creating new jobs > nsync/de92556b0d9f1e47335f82d3f220dcba8e50ec33. Done (00:00:00)
+  Started creating new jobs > nats/600de811c417ca9a0fc2939d2b52a9ffaf001946. Done (00:00:00)
+  Started creating new jobs > dea_next/5cecdadcca5d7ecb2c9449921ac7729dda8ca692. Done (00:00:00)
+  Started creating new jobs > hm9000/5d6b6e516e641dfcac4884bd0105b8d01481258a. Done (00:00:00)
+  Started creating new jobs > cloud_controller_ng/12c4e2a9fa3999794e398763ade1e3cf2d861809. Done (00:00:01)
+  Started creating new jobs > blobstore/bc2d50c5327c75f73b55d452cbdf13bf287aca4d. Done (00:00:00)
+  Started creating new jobs > stager/fb848481e3b40adac0daff83a381e8080ec7c39c. Done (00:00:00)
+  Started creating new jobs > nats_stream_forwarder/4515283e8bc83b4eeaf3ee28f33009facce33b8f. Done (00:00:00)
+  Started creating new jobs > route_registrar/c01b695237d3ece2d18af387e291158c55e90ea9. Done (00:00:00)
+  Started creating new jobs > metron_agent/09714e2755889dbfe68cd2d3a636966f3dd07d38. Done (00:00:00)
+  Started creating new jobs > doppler/12131dace83a7ad57bc4f327304aaf0d8d419adc. Done (00:00:00)
+  Started creating new jobs > nodejs-buildpack/4c9350acbe70b71e8f851d16b6a24fd6074a7400. Done (00:00:00)
+  Started creating new jobs > uaa/58c0cd61aa60a4839b834f17fe07c6fe81ae69d9. Done (00:00:00)
+  Started creating new jobs > go-buildpack/6a96c195d72160f64d4624612c235fe0142f0a42. Done (00:00:00)
+  Started creating new jobs > haproxy/d675c47a91714fc11d4f7b802f187e26e31281bc. Done (00:00:00)
+  Started creating new jobs > php-buildpack/29d809f43b59ffc3c2a14ac3888d7b20eb869c67. Done (00:00:00)
+  Started creating new jobs > smoke-tests/f5e4b489538b9cacb4928e1f96ff0048b8eb72c5. Done (00:00:00)
+  Started creating new jobs > debian_nfs_server/8c6159eca06f8b8dfbea48f9885340ba2fca6baf. Done (00:00:00)
+  Started creating new jobs > tps/c8f265265e9adfad16d3cf5f32e7f2e9a2accd69. Done (00:00:00)
+  Started creating new jobs > gorouter/cb6f441bca1f8e3bcec87089ebfa1bf805db82f7. Done (00:00:00)
+  Started creating new jobs > collector/6c210292f18d129e9a037fe7053836db2d494344. Done (00:00:00)
+  Started creating new jobs > ruby-buildpack/5c7e00c6e3deacb08ee95798a9194055bedbf246. Done (00:00:00)
+  Started creating new jobs > postgres/d21f787a348dc72c3290a97b753cb0545760be36. Done (00:00:00)
+  Started creating new jobs > etcd/5b804d2a1e3cff5d0ec250d7e1ddfb3375169d5b. Done (00:00:01)
+  Started creating new jobs > loggregator_trafficcontroller/08fead00ce93db58a19ad3a13639ec1bdc3a1b5c. Done (00:00:00)
+  Started creating new jobs > acceptance-tests/8d90b7e8fb55a710beb8c4f1d796694504b0f307. Done (00:00:00)
+  Started creating new jobs > syslog_drain_binder/e61f420765c1390543216f8f321ccfd78e292061. Done (00:00:00)
+  Started creating new jobs > nfs_mounter/4630a72f08ebe6713e58a4abda6d5f2085b344a0. Done (00:00:00)
+  Started creating new jobs > java-buildpack/3129e468525792deb8d482d5fea6bed79c585f95. Done (00:00:00)
+  Started creating new jobs > metron_agent_windows/872f1455cba8cfcd8d920e09b7b846eacd760a0d. Done (00:00:00)
+  Started creating new jobs > staticfile-buildpack/6031f7be3c42493fd3e147de50ee109d83f483c1. Done (00:00:00)
+  Started creating new jobs > cc_uploader/424c2f1e9bd5155ac4bca013f516f22217b41e04. Done (00:00:00)
+  Started creating new jobs > etcd_metrics_server/7565065e00c294161f172adfc57623fd9a6cc7c7. Done (00:00:00)
+  Started creating new jobs > cloud_controller_clock/a6722f94c4dc8b49cb30f462be8b74aa179c4d85. Done (00:00:00)
+  Started creating new jobs > dea_logging_agent/59de9485646549194e501ce2878449842943020c. Done (00:00:00)
+  Started creating new jobs > consul_agent/5a20ddd1e9c5fff2d2b4a5b77df73efc0b0523f3. Done (00:00:00)
+  Started creating new jobs > binary-buildpack/e2753ad7c384717801a27475b99bdea16669685d. Done (00:00:00)
+     Done creating new jobs (00:00:02)
+
+  Started release has been created > cf/245+dev.1. Done (00:00:00)
+
+Task 2 done
+
+Started		2016-10-26 00:05:21 UTC
+Finished	2016-10-26 00:07:59 UTC
+Duration	00:02:38
+release.tgz:    96% |ooooooooooooooooooooooo |   2.3GB   9.7MB/s Time: 00:03:59
+
+Release uploaded
+shilpen@shilpen-All-Series:~/workspace/bosh-lite/cf-release$ 
+

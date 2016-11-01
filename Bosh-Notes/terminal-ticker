@@ -1,0 +1,836 @@
+shilpen@shilpen-All-Series:~$ which ruby
+/usr/bin/ruby
+shilpen@shilpen-All-Series:~$ /bin/bash --login
+shilpen@shilpen-All-Series:~$ rvm use 2.3.0
+Warning! PATH is not properly set up, '/home/shilpen/.rvm/gems/ruby-2.3.0/bin' is not at first place,
+         usually this is caused by shell initialization files - check them for 'PATH=...' entries,
+         it might also help to re-add RVM to your dotfiles: 'rvm get stable --auto-dotfiles',
+         to fix temporarily in this shell session run: 'rvm use ruby-2.3.0'.
+Using /home/shilpen/.rvm/gems/ruby-2.3.0
+shilpen@shilpen-All-Series:~$ which ruby
+/home/shilpen/.rvm/rubies/ruby-2.3.0/bin/ruby
+shilpen@shilpen-All-Series:~$ ls
+Desktop                                            Ruby-deployment
+Documents                                          spiff
+examples.desktop                                   Templates
+mongodb-mms-monitoring-agent_2.1.0.35-1_amd64.deb  terminal_log
+Music                                              terminal_log_2
+notes2                                             Ubuntu One
+notes-bosh.txt                                     Videos
+Pictures                                           VirtualBox VMs
+Public                                             workspace
+shilpen@shilpen-All-Series:~$ cd workspace
+shilpen@shilpen-All-Series:~/workspace$ ls
+bosh-lite  HelloWorld  RobotMaze  RubyHelloWorld
+shilpen@shilpen-All-Series:~/workspace$ bosh-lite
+bosh-lite: command not found
+shilpen@shilpen-All-Series:~/workspace$ cd bosh-lite
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ ls
+bin  ca  cf-release  ci  docs  LICENSE  packer  README.md  tmp  Vagrantfile
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ vagrant 
+Usage: vagrant [options] <command> [<args>]
+
+    -v, --version                    Print the version and exit.
+    -h, --help                       Print this help.
+
+Common commands:
+     box             manages boxes: installation, removal, etc.
+     connect         connect to a remotely shared Vagrant environment
+     destroy         stops and deletes all traces of the vagrant machine
+     global-status   outputs status Vagrant environments for this user
+     halt            stops the vagrant machine
+     help            shows the help for a subcommand
+     init            initializes a new Vagrant environment by creating a Vagrantfile
+     login           log in to HashiCorp's Atlas
+     package         packages a running vagrant environment into a box
+     plugin          manages plugins: install, uninstall, update, etc.
+     provision       provisions the vagrant machine
+     push            deploys code in this environment to a configured destination
+     rdp             connects to machine via RDP
+     reload          restarts vagrant machine, loads new Vagrantfile configuration
+     resume          resume a suspended vagrant machine
+     share           share your Vagrant environment with anyone in the world
+     ssh             connects to machine via SSH
+     ssh-config      outputs OpenSSH valid configuration to connect to the machine
+     status          outputs status of the vagrant machine
+     suspend         suspends the machine
+     up              starts and provisions the vagrant environment
+     version         prints current and latest Vagrant version
+
+For help on any individual command run `vagrant COMMAND -h`
+
+Additional subcommands are available, but are either more advanced
+or not commonly used. To see all subcommands, run the command
+`vagrant list-commands`.
+
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ vagrant resume
+==> default: Resuming suspended VM...
+==> default: Booting VM...
+==> default: Waiting for machine to boot. This may take a few minutes...
+    default: SSH address: 127.0.0.1:2222
+    default: SSH username: vagrant
+    default: SSH auth method: private key
+    default: Warning: Connection timeout. Retrying...
+==> default: Machine booted and ready!
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ export no_proxy=xip.io,192.168.50.4
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh target 192.168.50.4 lite
+Target set to 'Bosh Lite Director'
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh taget
+Unknown command: taget
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh target
+Current target is https://192.168.50.4:25555 (Bosh Lite Director)
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bin/add-route
++ old_ips=10.244.0.0/19
++ ips=10.244.0.0/16
++ gw=192.168.50.4
++ echo 'Adding the following route entry to your local route table to enable direct container access: 10.244.0.0/16 via 192.168.50.4. Your sudo password may be required.'
+++ uname
++ '[' Linux = Darwin ']'
+++ uname
++ '[' Linux = Linux ']'
++ type route
++ sudo route del -net 10.244.0.0/19 gw 192.168.50.4
+[sudo] password for shilpen: 
+SIOCDELRT: No such process
++ sudo route add -net 10.244.0.0/16 gw 192.168.50.4
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh target
+Current target is https://192.168.50.4:25555 (Bosh Lite Director)
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh
+BOSH CLI helps you manage your BOSH deployments and releases.
+
+Usage: bosh [<options>] <command> [<args>]
+    -c, --config FILE                Override configuration file. Also can be overridden by BOSH_CONFIG environment variable. Defaults to $HOME/.bosh_config. Override precedence is command-line option, then environment variable, then home directory.
+        --parallel MAX               Sets the max number of parallel downloads
+        --[no-]color                 Toggle colorized output
+    -v, --verbose                    Show additional output
+    -q, --quiet                      Suppress all output
+    -n, --non-interactive            Don't ask for user input
+    -N, --no-track                   Return Task ID and don't track
+    -P, --poll INTERVAL              Director task polling interval
+    -t, --target URL                 Override target
+    -u, --user USER                  Override username
+    -p, --password PASSWORD          Override password
+    -d, --deployment FILE            Override deployment
+    -h, --help                       here you go
+        --ca-cert FILE               Override CA certificate
+
+add blob <local_path> [<blob_dir>]
+    Add a local file as BOSH blob
+
+alias <name> <command>
+    Create an alias <name> for command <command>
+
+aliases
+    Show the list of available command aliases
+
+attach disk <job_name> <id> <disk_cid>
+    Attaches an disk to an instance and replaces the current disk
+
+backup [<path>] [--force]
+    Backup BOSH
+    --force         Overwrite if the backup file already exists
+
+blobs
+    Print current blobs status
+
+cancel task <task_id>
+    Cancel task once it reaches the next checkpoint
+
+cleanup [--all]
+    Cleanup releases and stemcells
+    --all       Remove all unused releases and stemcells
+
+cleanup ssh
+    Cleanup SSH artifacts
+
+cloud-config
+    Download the current cloud config for the director
+
+cloudcheck [<deployment_name>] [--auto] [--report]
+    Cloud consistency check and interactive repair
+    --auto            resolve problems automatically (not recommended for production)
+    --report          generate report only, don't attempt to resolve problems
+
+complete
+    Command completion options
+
+create release [<manifest_file>] [--force] [--final] [--with-tarball]
+[--dry-run] [--name NAME] [--version VERSION] [--dir RELEASE_DIRECTORY]
+[--timestamp-version]
+    Create release (assumes current directory to be a release repository)
+    --force                                         bypass git dirty state check
+    --final                                         create final release
+    --with-tarball                                  create release tarball
+    --dry-run                                       stop before writing release manifest
+    --name NAME                                     specify a custom release name
+    --version VERSION                               specify a custom version number (ex: 1.0.0 or 1.0-beta.2+dev.10)
+    --dir RELEASE_DIRECTORY                         path to release directory
+    --timestamp-version                             create release with the timestamp as the dev version (ex:
+                            1+dev.TIMESTAMP)
+
+create user [<username>] [<password>]
+    Create user
+
+delete deployment <deployment_name> [--force]
+    Delete deployment
+    --force         ignore errors while deleting
+
+delete disk <orphan_disk_cid>
+    Deletes an orphaned disk
+
+delete release <name> [<version>] [--force]
+    Delete release (or a particular release version)
+    --force         ignore errors during deletion
+
+delete snapshot <snapshot_cid>
+    Deletes a snapshot
+
+delete snapshots
+    Deletes all snapshots of a deployment
+
+delete stemcell <name> <version> [--force]
+    Delete stemcell
+    --force         ignore errors while deleting the stemcell
+
+delete user [<username>]
+    Deletes the user from the director
+
+delete vm <vm_cid>
+    Deletes a vm
+
+deploy [--recreate] [--no-redact] [--skip-drain [job1,job2]]
+    Deploy according to the currently selected deployment manifest
+    --recreate                                        Recreate all VMs in deployment
+    --no-redact                                       Redact manifest value changes in deployment
+    --skip-drain [job1,job2]                          Skip drain script for either specific or all jobs
+
+deployment [<filename>]
+    Get/set current deployment
+
+deployments
+    Show the list of available deployments
+
+diff <template>
+    Diffs your current BOSH deployment configuration against the specified BOSH deployment
+    configuration template so that you can keep your deployment configuration file up to
+    date. A dev template can be found in deployments repos.
+
+disks [--orphaned]
+    List all orphaned disks in a deployment (requires --orphaned option)
+    --orphaned            Return orphaned disks
+
+download manifest <deployment_name> [<save_as>]
+    Download deployment manifest locally
+
+download public stemcell <stemcell_filename>
+    Downloads a stemcell from the public blobstore
+
+edit deployment
+    Edit current deployment manifest
+
+errands
+    List available errands
+
+events [--before-id id] [--before timestamp] [--after timestamp]
+[--deployment name] [--task id] [--instance job_name/id]
+    Show all deployment events
+    --before-id id                                Show all events with id less or equal to given id
+    --before timestamp                            Show all events by the given timestamp (ex: 2016-05-08 17:26:32)
+    --after timestamp                             Show all events after the given timestamp (ex: 2016-05-08
+                           17:26:32)
+    --deployment name                             Filter all events by the Deployment Name
+    --task id                                     Filter all events by the task id
+    --instance job_name/id                        Filter all events by the instance job_name/id
+
+export release <release> <stemcell>
+    Export the compiled release to a tarball. Release should be in the form of
+    {name}/{version} and stemcell should be in the form of {operating system name}/{stemcell
+    version}
+
+finalize release <tarball_path> [--dry-run] [--name NAME] [--version
+VERSION]
+    Create final release from dev release tarball (assumes current directory to be a release
+    repository)
+    --dry-run                           stop before writing release manifest
+    --name NAME                         specify a custom release name
+    --version VERSION                   specify a custom version number (ex: 1.0.0 or 1.0-beta.2+dev.10)
+
+generate job <name>
+    Generate job template
+
+generate package <name>
+    Generate package template
+
+get property <name>
+    Get deployment property
+
+help [--all]
+    Show help message
+    --all       Show help for all BOSH commands
+
+ignore instance <name_and_id>
+    Ignore an instance. 'name_and_id' should be in the form of {name}/{id}
+
+init release [<base>] [--git]
+    Initialize release directory
+    --git       initialize git repository
+
+inspect release <release>
+    List all jobs, packages, and compiled packages associated with a release. Release must
+    be in the form {name}/{version}
+
+instances [--details] [--dns] [--vitals] [--ps] [--failing]
+    List all instances in a deployment
+    --details           Return detailed instance information
+    --dns               Return instance DNS A records
+    --vitals            Return instance vitals information
+    --ps                Return instance process information
+    --failing           Only show failing ones
+
+locks
+    Show list of current locks
+
+login [<username>] [<password>]
+    Log in to currently targeted director. The username and password can also be set in the
+    BOSH_USER and BOSH_PASSWORD environment variables.
+
+logout
+    Forget saved credentials for targeted director
+
+logs <job> <index_or_id> [--agent] [--job] [--only filter1,filter2,...]
+[--dir destination_directory] [--all]
+    Fetch job or agent logs from a BOSH-managed VM
+    --agent                                                 fetch agent logs
+    --job                                                   fetch job logs
+    --only filter1,filter2,...                              only fetch logs that satisfy given filters (defined in job
+                                spec)
+    --dir destination_directory                             download directory
+    --all                                                   deprecated
+
+properties [--terse]
+    List deployment properties
+    --terse         easy to parse output
+
+public stemcells [--full] [--all]
+    Show the list of publicly available stemcells for download.
+    --full        show the full download url
+    --all         show all stemcells
+
+recreate [<job>] [<index_or_id>] [--force] [--max-in-flight
+MAX_IN_FLIGHT] [--canaries CANARIES] [--skip-drain]
+    Recreate all jobs/job/instance (hard stop + start)
+    --force                                                     Proceed even when there are other manifest changes
+    --max-in-flight MAX_IN_FLIGHT                               Overwrites max_in_flight value in the manifest
+    --canaries CANARIES                                         Overwrites canaries value in the manifest
+    --skip-drain                                                Skip running drain script
+
+releases [--jobs]
+    Show the list of available releases
+    --jobs        include job templates
+
+reset release
+    Reset dev release
+
+restart [<job>] [<index_or_id>] [--force] [--max-in-flight
+MAX_IN_FLIGHT] [--canaries CANARIES] [--skip-drain]
+    Restart all jobs/job/instance (soft stop + start)
+    --force                                                     Proceed even when there are other manifest changes
+    --max-in-flight MAX_IN_FLIGHT                               Overwrites max_in_flight value in the manifest
+    --canaries CANARIES                                         Overwrites canaries value in the manifest
+    --skip-drain                                                Skip running drain script
+
+restore <path>
+    Restore BOSH director database
+
+run errand [<errand_name>] [--download-logs] [--logs-dir
+destination_directory] [--keep-alive]
+    Run specified errand
+    --download-logs                                                   download logs
+    --logs-dir destination_directory                                  logs download directory
+    --keep-alive                                                      prevent deletion/creation of vm after running errand
+
+runtime-config
+    Download the current runtime config for the director
+
+scp <job>/<index> <source> <destination> [--download] [--upload]
+[--gateway_host HOST] [--gateway_user USER] [--gateway_identity_file
+FILE] [--no_gateway]
+    Transfer files to (--upload) or from (--download) a job.
+    Note: for --download, <destination> is treated as a directory
+    --download                                                Download <source> file from the job
+    --upload                                                  Upload <source> file to the job
+    --gateway_host HOST                                       Gateway host
+    --gateway_user USER                                       Gateway user
+    --gateway_identity_file FILE                              Gateway identity file
+    --no_gateway                                              Ignore gateway provided by the director
+
+set property <name> <value>
+    Set deployment property
+
+snapshots [<job>] [<index>]
+    List all snapshots
+
+ssh <job>/<index> [--gateway_host HOST] [--gateway_user USER]
+[--gateway_identity_file FILE] [--default_password PASSWORD]
+[--strict_host_key_checking <yes/no>] [--no_gateway]
+    Execute command or start an interactive session
+    --gateway_host HOST                                                     Gateway host
+    --gateway_user USER                                                     Gateway user
+    --gateway_identity_file FILE                                            Gateway identity file
+    --default_password PASSWORD                                             Use default ssh password (NOT RECOMMENDED)
+    --strict_host_key_checking <yes/no>                                     Can use this flag to skip host key checking (NOT
+                                        RECOMMENDED)
+    --no_gateway                                                            Ignore gateway provided by the director
+
+start [<job>] [<index_or_id>] [--force] [--max-in-flight MAX_IN_FLIGHT]
+[--canaries CANARIES]
+    Start all jobs/job/instance
+    --force                                                     Proceed even when there are other manifest changes
+    --max-in-flight MAX_IN_FLIGHT                               Overwrites max_in_flight value in the manifest
+    --canaries CANARIES                                         Overwrites canaries value in the manifest
+
+status [--uuid]
+    Show current status (current target, user, deployment info etc)
+    --uuid        Only print director UUID
+
+stemcells
+    Show the list of available stemcells
+
+stop [<job>] [<index_or_id>] [--soft] [--hard] [--force]
+[--max-in-flight MAX_IN_FLIGHT] [--canaries CANARIES] [--skip-drain]
+    Stop all jobs/job/instance
+    --soft                                                      Stop process only
+    --hard                                                      Delete the VM
+    --force                                                     Proceed even when there are other manifest changes
+    --max-in-flight MAX_IN_FLIGHT                               Overwrites max_in_flight value in the manifest
+    --canaries CANARIES                                         Overwrites canaries value in the manifest
+    --skip-drain                                                Skip running drain script
+
+sync blobs
+    Sync blob with the blobstore
+
+take snapshot [<job>] [<index>]
+    Takes a snapshot
+
+target [<director_url>] [<name>]
+    Choose director to talk to (optionally creating an alias). If no arguments given, show
+    currently targeted director
+
+targets
+    Show the list of available targets
+
+task [<task_id>] [--event] [--cpi] [--debug] [--result] [--raw]
+[--no-filter]
+    Show task status and start tracking its output
+    --event                 Track event log
+    --cpi                   Track CPI log
+    --debug                 Track debug log
+    --result                Track result log
+    --raw                   Show raw log
+    --no-filter             Include all task types (ssh, logs, vms, etc)
+
+tasks [--no-filter] [--deployment DEPLOYMENT_NAME]
+    Show running tasks
+    --no-filter                                               Include all task types (ssh, logs, vms, etc)
+    --deployment DEPLOYMENT_NAME                              Show tasks for given deployment
+
+tasks recent [<count>] [--no-filter] [--deployment DEPLOYMENT_NAME]
+    Show <number> recent tasks
+    --no-filter                                               Include all task types (ssh, logs, vms, etc)
+    --deployment DEPLOYMENT_NAME                              Show tasks for given deployment
+
+unignore instance <name_and_id>
+    Unignore an instance. 'name_and_id' should be in the form of {name}/{id}
+
+unset property <name>
+    Unset deployment property
+
+update cloud-config <cloud_config_path>
+    Update the current cloud config for the director
+
+update runtime-config <runtime_config_path>
+    Update the current runtime config for the director
+
+upload blobs
+    Upload new and updated blobs to the blobstore
+
+upload release [<release_file>] [--rebase] [--skip-if-exists] [--dir
+RELEASE_DIRECTORY] [--sha1 SHA1] [--name NAME] [--version VERSION]
+[--fix]
+    Upload release (release_file can be a local file or a remote URI). If --name & --version
+    are provided, they will be used for checking if release exists & upload will be skipped
+    if it exists (for both local and remote)
+    --rebase                                        Rebases this release onto the latest version known by director
+                            (discards local job/package versions in favor of versions
+                            assigned by director)
+    --skip-if-exists                                no-op; retained for backward compatibility
+    --dir RELEASE_DIRECTORY                         path to release directory
+    --sha1 SHA1                                     SHA1 of the remote release
+    --name NAME                                     name of the release
+    --version VERSION                               version of the release
+    --fix                                           verify blobstore contents and replace with correct versions
+
+upload stemcell <stemcell_location> [--skip-if-exists] [--fix] [--sha1
+SHA1] [--name NAME] [--version VERSION]
+    Upload stemcell (stemcell_location can be a local file or a remote URI). Note that
+    --skip-if-exists and --fix can not be used together. If --name & --version are provided,
+    they will be used for checking if stemcell exists & upload will be skipped if it exists
+    (for both local and remote)
+    --skip-if-exists                    skips upload if stemcell already exists
+    --fix                               replaces the stemcell if already exists
+    --sha1 SHA1                         SHA1 of the remote stemcell
+    --name NAME                         name of the stemcell
+    --version VERSION                   version of the stemcell
+
+verify release <tarball_path>
+    Verify release
+
+verify stemcell <tarball_path>
+    Verify stemcell
+
+version
+    Show version
+
+vm resurrection [<job>] [<index_or_id>] <new_state>
+    Enable/Disable resurrection for a given vm
+
+vms [<deployment_name>] [--details] [--dns] [--vitals]
+    List all VMs in a deployment
+    --details           Return detailed VM information
+    --dns               Return VM DNS A records
+    --vitals            Return VM vitals information
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ vagrant ssh
+Welcome to Ubuntu 14.04.4 LTS (GNU/Linux 4.2.0-42-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com/
+vagrant@bosh-lite:~$ exit
+logout
+Connection to 127.0.0.1 closed.
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh ssh
+1. runner_z1/0 (3c614e9b-a8d8-4779-83bb-9696aa5efe79)
+2. api_z1/0 (34db72ff-6ae6-4edd-9289-6299c3f17518)
+3. consul_z1/0 (d02451da-2ccc-4ab2-8961-c512cd6d0e0e)
+4. hm9000_z1/0 (636fbf60-630b-48b6-8546-75809f300aa4)
+5. router_z1/0 (9a208177-e69b-46a8-ad50-fe3aa81a3eb1)
+6. uaa_z1/0 (dd9f3758-7bc2-40cd-83a7-2ace141087c1)
+7. etcd_z1/0 (69dfe2d8-4915-4a28-a2f0-535c4af20b38)
+8. loggregator_trafficcontroller_z1/0 (53c3cfe2-3032-428b-a6b9-9beb071b1a97)
+9. blobstore_z1/0 (e3a4635d-4645-4bc3-bd4a-70007a481c91)
+10. nats_z1/0 (26aca995-33b3-4a5f-b1b3-2df527bf8daa)
+11. ha_proxy_z1/0 (6a95f29e-75f0-4fc7-b1fe-05137090d2e2)
+12. doppler_z1/0 (c1024f68-75da-4690-9e6c-ead2b0ff7c74)
+13. postgres_z1/0 (2248e9ed-6458-4a96-92d2-b41afd76bb71)
+Choose an instance: 
+Ambiguous choice.  Please choose one of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, runner_z1/0 (3c614e9b-a8d8-4779-83bb-9696aa5efe79), api_z1/0 (34db72ff-6ae6-4edd-9289-6299c3f17518), consul_z1/0 (d02451da-2ccc-4ab2-8961-c512cd6d0e0e), hm9000_z1/0 (636fbf60-630b-48b6-8546-75809f300aa4), router_z1/0 (9a208177-e69b-46a8-ad50-fe3aa81a3eb1), uaa_z1/0 (dd9f3758-7bc2-40cd-83a7-2ace141087c1), etcd_z1/0 (69dfe2d8-4915-4a28-a2f0-535c4af20b38), loggregator_trafficcontroller_z1/0 (53c3cfe2-3032-428b-a6b9-9beb071b1a97), blobstore_z1/0 (e3a4635d-4645-4bc3-bd4a-70007a481c91), nats_z1/0 (26aca995-33b3-4a5f-b1b3-2df527bf8daa), ha_proxy_z1/0 (6a95f29e-75f0-4fc7-b1fe-05137090d2e2), doppler_z1/0 (c1024f68-75da-4690-9e6c-ead2b0ff7c74), postgres_z1/0 (2248e9ed-6458-4a96-92d2-b41afd76bb71)].
+?  
+Ambiguous choice.  Please choose one of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, runner_z1/0 (3c614e9b-a8d8-4779-83bb-9696aa5efe79), api_z1/0 (34db72ff-6ae6-4edd-9289-6299c3f17518), consul_z1/0 (d02451da-2ccc-4ab2-8961-c512cd6d0e0e), hm9000_z1/0 (636fbf60-630b-48b6-8546-75809f300aa4), router_z1/0 (9a208177-e69b-46a8-ad50-fe3aa81a3eb1), uaa_z1/0 (dd9f3758-7bc2-40cd-83a7-2ace141087c1), etcd_z1/0 (69dfe2d8-4915-4a28-a2f0-535c4af20b38), loggregator_trafficcontroller_z1/0 (53c3cfe2-3032-428b-a6b9-9beb071b1a97), blobstore_z1/0 (e3a4635d-4645-4bc3-bd4a-70007a481c91), nats_z1/0 (26aca995-33b3-4a5f-b1b3-2df527bf8daa), ha_proxy_z1/0 (6a95f29e-75f0-4fc7-b1fe-05137090d2e2), doppler_z1/0 (c1024f68-75da-4690-9e6c-ead2b0ff7c74), postgres_z1/0 (2248e9ed-6458-4a96-92d2-b41afd76bb71)].
+?  0
+You must choose one of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, runner_z1/0 (3c614e9b-a8d8-4779-83bb-9696aa5efe79), api_z1/0 (34db72ff-6ae6-4edd-9289-6299c3f17518), consul_z1/0 (d02451da-2ccc-4ab2-8961-c512cd6d0e0e), hm9000_z1/0 (636fbf60-630b-48b6-8546-75809f300aa4), router_z1/0 (9a208177-e69b-46a8-ad50-fe3aa81a3eb1), uaa_z1/0 (dd9f3758-7bc2-40cd-83a7-2ace141087c1), etcd_z1/0 (69dfe2d8-4915-4a28-a2f0-535c4af20b38), loggregator_trafficcontroller_z1/0 (53c3cfe2-3032-428b-a6b9-9beb071b1a97), blobstore_z1/0 (e3a4635d-4645-4bc3-bd4a-70007a481c91), nats_z1/0 (26aca995-33b3-4a5f-b1b3-2df527bf8daa), ha_proxy_z1/0 (6a95f29e-75f0-4fc7-b1fe-05137090d2e2), doppler_z1/0 (c1024f68-75da-4690-9e6c-ead2b0ff7c74), postgres_z1/0 (2248e9ed-6458-4a96-92d2-b41afd76bb71)].
+?  0
+You must choose one of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, runner_z1/0 (3c614e9b-a8d8-4779-83bb-9696aa5efe79), api_z1/0 (34db72ff-6ae6-4edd-9289-6299c3f17518), consul_z1/0 (d02451da-2ccc-4ab2-8961-c512cd6d0e0e), hm9000_z1/0 (636fbf60-630b-48b6-8546-75809f300aa4), router_z1/0 (9a208177-e69b-46a8-ad50-fe3aa81a3eb1), uaa_z1/0 (dd9f3758-7bc2-40cd-83a7-2ace141087c1), etcd_z1/0 (69dfe2d8-4915-4a28-a2f0-535c4af20b38), loggregator_trafficcontroller_z1/0 (53c3cfe2-3032-428b-a6b9-9beb071b1a97), blobstore_z1/0 (e3a4635d-4645-4bc3-bd4a-70007a481c91), nats_z1/0 (26aca995-33b3-4a5f-b1b3-2df527bf8daa), ha_proxy_z1/0 (6a95f29e-75f0-4fc7-b1fe-05137090d2e2), doppler_z1/0 (c1024f68-75da-4690-9e6c-ead2b0ff7c74), postgres_z1/0 (2248e9ed-6458-4a96-92d2-b41afd76bb71)].
+?  1
+Acting as user 'admin' on deployment 'cf-warden' on 'Bosh Lite Director'
+Target deployment is 'cf-warden'
+
+Setting up ssh artifacts
+
+Director task 15
+
+Task 15 done
+Starting interactive shell on job runner_z1/0
+Unauthorized use is strictly prohibited. All access and activity
+is subject to logging and monitoring.
+Welcome to Ubuntu 14.04 LTS (GNU/Linux 3.13.0-29-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com/
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+Last login: Sun Oct 30 11:18:08 2016 from 192.168.50.1
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+bosh_rijr66uvn@1ae2deb1-74f8-4d6b-9649-0e799f0494a6:~$ exit
+logout
+Connection to 10.244.0.26 closed.
+
+Cleaning up ssh artifacts
+
+Director task 16
+
+Task 16 queued
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh vms
+Acting as user 'admin' on 'Bosh Lite Director'
+Deployment 'cf-warden'
+
+Director task 17
+
+Task 17 done
+
++---------------------------------------------------------------------------+---------+-----+-----------+--------------+
+| VM                                                                        | State   | AZ  | VM Type   | IPs          |
++---------------------------------------------------------------------------+---------+-----+-----------+--------------+
+| api_z1/0 (34db72ff-6ae6-4edd-9289-6299c3f17518)                           | running | n/a | large_z1  | 10.244.0.138 |
+| blobstore_z1/0 (e3a4635d-4645-4bc3-bd4a-70007a481c91)          cf api --skip-ssl-validation https://api.bosh-lite.com           | running | n/a | medium_z1 | 10.244.0.130 |
+| consul_z1/0 (d02451da-2ccc-4ab2-8961-c512cd6d0e0e)                        | running | n/a | small_z1  | 10.244.0.54  |
+| doppler_z1/0 (c1024f68-75da-4690-9e6c-ead2b0ff7c74)                       | running | n/a | medium_z1 | 10.244.0.146 |
+| etcd_z1/0 (69dfe2d8-4915-4a28-a2f0-535c4af20b38)                          | running | n/a | large_z1  | 10.244.0.42  |
+| ha_proxy_z1/0 (6a95f29e-75f0-4fc7-b1fe-05137090d2e2)                      | running | n/a | router_z1 | 10.244.0.34  |
+| hm9000_z1/0 (636fbf60-630b-48b6-8546-75809f300aa4)                        | running | n/a | medium_z1 | 10.244.0.142 |
+| loggregator_trafficcontroller_z1/0 (53c3cfe2-3032-428b-a6b9-9beb071b1a97) | running | n/a | small_z1  | 10.244.0.150 |
+| nats_z1/0 (26aca995-33b3-4a5f-b1b3-2df527bf8daa)                          | running | n/a | medium_z1 | 10.244.0.6   |
+| postgres_z1/0 (2248e9ed-6458-4a96-92d2-b41afd76bb71)                      | running | n/a | medium_z1 | 10.244.0.30  |
+| router_z1/0 (9a208177-e69b-46a8-ad50-fe3aa81a3eb1)                        | running | n/a | router_z1 | 10.244.0.22  |
+| runner_z1/0 (3c614e9b-a8d8-4779-83bb-9696aa5efe79)                        | running | n/a | runner_z1 | 10.244.0.26  |
+| uaa_z1/0 (dd9f3758-7bc2-40cd-83a7-2ace141087c1)                           | running | n/a | medium_z1 | 10.244.0.134 |
++---------------------------------------------------------------------------+---------+-----+-----------+--------------+
+
+VMs total: 13
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh login
+Your username: admin
+Enter password: 
+Logged in as 'admin'
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh vms
+Acting as user 'admin' on 'Bosh Lite Director'
+Deployment 'cf-warden'
+
+Director task 18
+
+Task 18 done
+
++---------------------------------------------------------------------------+---------+-----+-----------+--------------+
+| VM                                                                        | State   | AZ  | VM Type   | IPs          |
++---------------------------------------------------------------------------+---------+-----+-----------+--------------+
+| api_z1/0 (34db72ff-6ae6-4edd-9289-6299c3f17518)                           | running | n/a | large_z1  | 10.244.0.138 |
+| blobstore_z1/0 (e3a4635d-4645-4bc3-bd4a-70007a481c91)                     | running | n/a | medium_z1 | 10.244.0.130 |
+| consul_z1/0 (d02451da-2ccc-4ab2-8961-c512cd6d0e0e)                        | running | n/a | small_z1  | 10.244.0.54  |
+| doppler_z1/0 (c1024f68-75da-4690-9e6c-ead2b0ff7c74)                       | running | n/a | medium_z1 | 10.244.0.146 |
+| etcd_z1/0 (69dfe2d8-4915-4a28-a2f0-535c4af20b38)                          | running | n/a | large_z1  | 10.244.0.42  |
+| ha_proxy_z1/0 (6a95f29e-75f0-4fc7-b1fe-05137090d2e2)                      | running | n/a | router_z1 | 10.244.0.34  |
+| hm9000_z1/0 (636fbf60-630b-48b6-8546-75809f300aa4)                        | running | n/a | medium_z1 | 10.244.0.142 |
+| loggregator_trafficcontroller_z1/0 (53c3cfe2-3032-428b-a6b9-9beb071b1a97) | running | n/a | small_z1  | 10.244.0.150 |
+| nats_z1/0 (26aca995-33b3-4a5f-b1b3-2df527bf8daa)                          | running | n/a | medium_z1 | 10.244.0.6   |
+| postgres_z1/0 (2248e9ed-6458-4a96-92d2-b41afd76bb71)                      | running | n/a | medium_z1 | 10.244.0.30  |
+| router_z1/0 (9a208177-e69b-46a8-ad50-fe3aa81a3eb1)                        | running | n/a | router_z1 | 10.244.0.22  |
+| runner_z1/0 (3c614e9b-a8d8-4779-83bb-9696aa5efe79)                        | running | n/a | runner_z1 | 10.244.0.26  |
+| uaa_z1/0 (dd9f3758-7bc2-40cd-83a7-2ace141087c1)                           | running | n/a | medium_z1 | 10.244.0.134 |
++---------------------------------------------------------------------------+---------+-----+-----------+--------------+
+
+VMs total: 13
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh releases
+Acting as user 'admin' on 'Bosh Lite Director'
+
++------+------------+-------------+
+| Name | Versions   | Commit Hash |
++------+------------+-------------+
+| cf   | 245+dev.1* | 1a84cd71    |
++------+------------+-------------+
+(*) Currently deployed
+
+Releases total: 1
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh release
+Unknown command: release
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ bosh deployments
+Acting as user 'admin' on 'Bosh Lite Director'
+
++-----------+--------------+----------------------------------------------------+--------------+
+| Name      | Release(s)   | Stemcell(s)                                        | Cloud Config |
++-----------+--------------+----------------------------------------------------+--------------+
+| cf-warden | cf/245+dev.1 | bosh-warden-boshlite-ubuntu-trusty-go_agent/3262.2 | none         |
++-----------+--------------+----------------------------------------------------+--------------+
+
+Deployments total: 1
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ which cloud config
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ which cloud-config
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ ls
+bin  ca  cf-release  ci  docs  LICENSE  packer  README.md  tmp  Vagrantfile
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ cd cf-release
+lshilpen@shilpen-All-Series:~/workspace/bosh-lite/cf-release$ ls
+blobs      config           dev_releases  example_manifests  Gemfile.lock  jobs     NOTICE    README.md  scripts  src
+bosh-lite  CONTRIBUTING.md  docs          Gemfile            githooks      LICENSE  packages  releases   spec     templates
+shilpen@shilpen-All-Series:~/workspace/bosh-lite/cf-release$ cd config
+shilpen@shilpen-All-Series:~/workspace/bosh-lite/cf-release/config$ ls
+blobs.yml  dev.yml  final.yml
+shilpen@shilpen-All-Series:~/workspace/bosh-lite/cf-release/config$ vi final.yml
+shilpen@shilpen-All-Series:~/workspace/bosh-lite/cf-release/config$ vi dev.yml
+shilpen@shilpen-All-Series:~/workspace/bosh-lite/cf-release/config$ cd ..
+shilpen@shilpen-All-Series:~/workspace/bosh-lite/cf-release$ ls
+blobs      config           dev_releases  example_manifests  Gemfile.lock  jobs     NOTICE    README.md  scripts  src
+bosh-lite  CONTRIBUTING.md  docs          Gemfile            githooks      LICENSE  packages  releases   spec     templates
+shilpen@shilpen-All-Series:~/workspace/bosh-lite/cf-release$ cd
+shilpen@shilpen-All-Series:~$ go run main.go
+stat main.go: no such file or directory
+shilpen@shilpen-All-Series:~$ golang
+golang: command not found
+shilpen@shilpen-All-Series:~$ cd builds
+bash: cd: builds: No such file or directory
+shilpen@shilpen-All-Series:~$ ls
+Desktop           mongodb-mms-monitoring-agent_2.1.0.35-1_amd64.deb  notes-bosh.txt  Ruby-deployment  terminal_log    Videos
+Documents         Music                                              Pictures        spiff            terminal_log_2  VirtualBox VMs
+examples.desktop  notes2                                             Public          Templates        Ubuntu One      workspace
+shilpen@shilpen-All-Series:~$ cd workspace
+shilpen@shilpen-All-Series:~/workspace$ which golang
+shilpen@shilpen-All-Series:~/workspace$ which go
+/usr/bin/go
+shilpen@shilpen-All-Series:~/workspace$ mkdir -p ticker
+shilpen@shilpen-All-Series:~/workspace$ cd ticker
+shilpen@shilpen-All-Series:~/workspace/ticker$ vi main.go
+shilpen@shilpen-All-Series:~/workspace/ticker$ go run main.go
+Ticker starting 
+Hello world from 2016-10-30 11:46:30.186041792 +0000 GMT 
+ERROR at 2016-10-30 11:46:30.186041792 +0000 GMT 
+Hello world from 2016-10-30 11:46:31.186047039 +0000 GMT 
+ERROR at 2016-10-30 11:46:31.186047039 +0000 GMT 
+Hello world from 2016-10-30 11:46:32.186047398 +0000 GMT 
+ERROR at 2016-10-30 11:46:32.186047398 +0000 GMT 
+Hello world from 2016-10-30 11:46:33.186047796 +0000 GMT 
+ERROR at 2016-10-30 11:46:33.186047796 +0000 GMT 
+Hello world from 2016-10-30 11:46:34.186047876 +0000 GMT 
+ERROR at 2016-10-30 11:46:34.186047876 +0000 GMT 
+Hello world from 2016-10-30 11:46:35.186047093 +0000 GMT 
+ERROR at 2016-10-30 11:46:35.186047093 +0000 GMT 
+Hello world from 2016-10-30 11:46:36.186046642 +0000 GMT 
+ERROR at 2016-10-30 11:46:36.186046642 +0000 GMT 
+Hello world from 2016-10-30 11:46:37.1860492 +0000 GMT 
+ERROR at 2016-10-30 11:46:37.1860492 +0000 GMT 
+Hello world from 2016-10-30 11:46:38.18604935 +0000 GMT 
+ERROR at 2016-10-30 11:46:38.18604935 +0000 GMT 
+Hello world from 2016-10-30 11:46:39.186047698 +0000 GMT 
+ERROR at 2016-10-30 11:46:39.186047698 +0000 GMT 
+Hello world from 2016-10-30 11:46:40.18604755 +0000 GMT 
+ERROR at 2016-10-30 11:46:40.18604755 +0000 GMT 
+^Csignal: interrupt
+shilpen@shilpen-All-Series:~/workspace/ticker$ cd ..
+shilpen@shilpen-All-Series:~/workspace$ mkdir -p builds
+shilpen@shilpen-All-Series:~/workspace$ curl https://hello-world-update.bosh-lite.com/
+curl: (60) server certificate verification failed. CAfile: /etc/ssl/certs/ca-certificates.crt CRLfile: none
+More details here: http://curl.haxx.se/docs/sslcerts.html
+
+curl performs SSL certificate verification by default, using a "bundle"
+ of Certificate Authority (CA) public keys (CA certs). If the default
+ bundle file isn't adequate, you can specify an alternate file
+ using the --cacert option.
+If this HTTPS server uses a certificate signed by a CA represented in
+ the bundle, the certificate verification probably failed due to a
+ problem with the certificate (it might be expired, or the name might
+ not match the domain name in the URL).
+If you'd like to turn off curl's verification of the certificate, use
+ the -k (or --insecure) option.
+shilpen@shilpen-All-Series:~/workspace$ curl https://hello-world-update.bosh-lite.com
+curl: (60) server certificate verification failed. CAfile: /etc/ssl/certs/ca-certificates.crt CRLfile: none
+More details here: http://curl.haxx.se/docs/sslcerts.html
+
+curl performs SSL certificate verification by default, using a "bundle"
+ of Certificate Authority (CA) public keys (CA certs). If the default
+ bundle file isn't adequate, you can specify an alternate file
+ using the --cacert option.
+If this HTTPS server uses a certificate signed by a CA represented in
+ the bundle, the certificate verification probably failed due to a
+ problem with the certificate (it might be expired, or the name might
+ not match the domain name in the URL).
+If you'd like to turn off curl's verification of the certificate, use
+ the -k (or --insecure) option.
+shilpen@shilpen-All-Series:~/workspace$ curl https://api.hello-world-update.bosh-lite.com/
+curl: (60) server certificate verification failed. CAfile: /etc/ssl/certs/ca-certificates.crt CRLfile: none
+More details here: http://curl.haxx.se/docs/sslcerts.html
+
+curl performs SSL certificate verification by default, using a "bundle"
+ of Certificate Authority (CA) public keys (CA certs). If the default
+ bundle file isn't adequate, you can specify an alternate file
+ using the --cacert option.
+If this HTTPS server uses a certificate signed by a CA represented in
+ the bundle, the certificate verification probably failed due to a
+ problem with the certificate (it might be expired, or the name might
+ not match the domain name in the URL).
+If you'd like to turn off curl's verification of the certificate, use
+ the -k (or --insecure) option.
+shilpen@shilpen-All-Series:~/workspace$ curl -k https://api.hello-world-update.bosh-lite.com/
+404 Not Found: Requested route ('api.hello-world-update.bosh-lite.com') does not exist.
+shilpen@shilpen-All-Series:~/workspace$ curl -k https://hello-world-update.bosh-lite.com/
+hello world my first cf-pushshilpen@shilpen-All-Series:~/workspace$ curl -k https://hello-world-update.bosh-lite.com
+hello world my first cf-pushshilpen@shilpen-All-Series:~/workspace$ 
+shilpen@shilpen-All-Series:~/workspace$ 
+shilpen@shilpen-All-Series:~/workspace$ bosh init release my-bosh-release
+Release directory initialized
+shilpen@shilpen-All-Series:~/workspace$ find my-bosh-release
+my-bosh-release
+my-bosh-release/config
+my-bosh-release/config/blobs.yml
+my-bosh-release/packages
+my-bosh-release/jobs
+my-bosh-release/src
+my-bosh-release/blobs
+shilpen@shilpen-All-Series:~/workspace$ pwd
+/home/shilpen/workspace
+shilpen@shilpen-All-Series:~/workspace$ ls
+bosh-lite  builds  HelloWorld  my-bosh-release  RobotMaze  RubyHelloWorld  ticker
+shilpen@shilpen-All-Series:~/workspace$ cd my-bosh-release
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release$ ls
+blobs  config  jobs  packages  src
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release$ ls -lrth
+total 20K
+drwxrwxr-x 2 shilpen shilpen 4.0K Oct 30 12:03 jobs
+drwxrwxr-x 2 shilpen shilpen 4.0K Oct 30 12:03 src
+drwxrwxr-x 2 shilpen shilpen 4.0K Oct 30 12:03 packages
+drwxrwxr-x 2 shilpen shilpen 4.0K Oct 30 12:03 config
+drwxrwxr-x 2 shilpen shilpen 4.0K Oct 30 12:03 blobs
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release$ cd src
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release/src$ ls
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release/src$ cd ..
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release$ ls
+blobs  config  jobs  packages  src
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release$ cd ..
+shilpen@shilpen-All-Series:~/workspace$ ls
+bosh-lite  builds  HelloWorld  my-bosh-release  RobotMaze  RubyHelloWorld  ticker
+shilpen@shilpen-All-Series:~/workspace$ cd builds
+shilpen@shilpen-All-Series:~/workspace/builds$ ls
+timer-linux
+shilpen@shilpen-All-Series:~/workspace/builds$ ./timer-linux
+bash: ./timer-linux: Permission denied
+shilpen@shilpen-All-Series:~/workspace/builds$ timer-linux
+timer-linux: command not found
+shilpen@shilpen-All-Series:~/workspace/builds$ make timer-linux
+make: Nothing to be done for 'timer-linux'.
+shilpen@shilpen-All-Series:~/workspace/builds$ ls
+timer-linux
+shilpen@shilpen-All-Series:~/workspace/builds$ ls -lrth
+total 1.9M
+-rw-rw-r-- 1 shilpen shilpen 1.9M Oct 30 11:44 timer-linux
+shilpen@shilpen-All-Series:~/workspace/builds$ chmod 775 timer-linux
+shilpen@shilpen-All-Series:~/workspace/builds$ timer-linux
+timer-linux: command not found
+shilpen@shilpen-All-Series:~/workspace/builds$ ./timer-linux
+Ticker starting 
+Hello world from 2016-10-30 12:11:14.071538577 +0000 GMT 
+ERROR at 2016-10-30 12:11:14.071538577 +0000 GMT 
+Hello world from 2016-10-30 12:11:15.07154114 +0000 GMT 
+ERROR at 2016-10-30 12:11:15.07154114 +0000 GMT 
+Hello world from 2016-10-30 12:11:16.071539954 +0000 GMT 
+ERROR at 2016-10-30 12:11:16.071539954 +0000 GMT 
+Hello world from 2016-10-30 12:11:17.071541179 +0000 GMT 
+ERROR at 2016-10-30 12:11:17.071541179 +0000 GMT 
+^Cshilpen@shilpen-All-Series:~/workspace/builds$ ls -lrth
+total 1.9M
+-rwxrwxr-x 1 shilpen shilpen 1.9M Oct 30 11:44 timer-linux
+shilpen@shilpen-All-Series:~/workspace/builds$ cd ..
+shilpen@shilpen-All-Series:~/workspace$ ls
+bosh-lite  builds  HelloWorld  my-bosh-release  RobotMaze  RubyHelloWorld  ticker
+shilpen@shilpen-All-Series:~/workspace$ bosh generate package linux-timer
+Sorry, your current directory doesn't look like release directory
+shilpen@shilpen-All-Series:~/workspace$ cd my-bosh-release
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release$ ls
+blobs  config  jobs  packages  src
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release$ bosh generate package linux-timer
+create	packages/linux-timer
+create	packages/linux-timer/packaging
+create	packages/linux-timer/pre_packaging
+create	packages/linux-timer/spec
+
+Generated skeleton for 'linux-timer' package in 'packages/linux-timer'
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release$ 
+

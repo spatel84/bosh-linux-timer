@@ -1,0 +1,76 @@
+Enable CPU for virtualisation - Bios change
+Ruby rvm
+rvm install 2.3.0
+rvm use 2.3.0
+which ruby
+shilpen@shilpen-All-Series:~$ which ruby
+/home/shilpen/.rvm/rubies/ruby-2.3.0/bin/ruby
+shilpen@shilpen-All-Series:~$ 
+
+rvm list known
+vagrant
+VBoxManage --version
+5.0.24_Ubuntur108355
+
+
+
+Spiff -> Go
+go path
+http://stackoverflow.com/questions/21001387/how-do-i-set-the-gopath-environment-variable-on-ubuntu-what-file-must-i-edit
+
+set bosh director
+set manifesrt
+
+./scripts/generate-bosh-lite-dev-manifest
+
+
+shilpen@shilpen-All-Series:~/workspace/bosh-lite/cf-release$ ./scripts/generate-bosh-lite-dev-manifest
+Deployment set to '/home/shilpen/workspace/bosh-lite/cf-release/bosh-lite/deployments/cf.yml'
+shilpen@shilpen-All-Series:~/workspace/bosh-lite/cf-release$ view /home/shilpen/workspace/bosh-lite/cf-release/bosh-lite/deployments/cf.yml
+
+
+upload to stemcell
+
+shilpen@shilpen-All-Series:~/workspace/bosh-lite/cf-release$ bosh upload stemcell ~/Documents/Downloads/bosh-stemcell-3262.2-warden-boshlite-ubuntu-trusty-go_agent.tgz
+Acting as user 'admin' on 'Bosh Lite Director'
+
+Verifying stemcell...
+File exists and readable                                     OK
+Verifying tarball...
+Read tarball                                                 OK
+Manifest exists                                              OK
+Stemcell image file                                          OK
+Stemcell properties                                          OK
+
+Stemcell info
+-------------
+Name:    bosh-warden-boshlite-ubuntu-trusty-go_agent
+Version: 3262.2
+
+Checking if stemcell already exists...
+No
+
+Uploading stemcell...
+
+bosh-stemcell:  96% |oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo   | 450.9MB  51.0MB/s ETA:  00:00:00
+Director task 1
+  Started update stemcell
+  Started update stemcell > Extracting stemcell archive. Done (00:00:03)
+  Started update stemcell > Verifying stemcell manifest. Done (00:00:00)
+  Started update stemcell > Checking if this stemcell already exists. Done (00:00:00)
+  Started update stemcell > Uploading stemcell bosh-warden-boshlite-ubuntu-trusty-go_agent/3262.2 to the cloud. Done (00:00:19)
+  Started update stemcell > Save stemcell bosh-warden-boshlite-ubuntu-trusty-go_agent/3262.2 (21e30358-7804-4840-4221-e83eff5cc46b). Done (00:00:02)
+     Done update stemcell (00:00:24)
+
+Task 1 done
+
+Started		2016-10-25 21:35:33 UTC
+Finished	2016-10-25 21:35:57 UTC
+Duration	00:00:24
+bosh-stemcell:  96% |oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo   | 452.0MB  12.9MB/s Time: 00:00:35
+
+Stemcell uploaded and created.
+shilpen@shilpen-All-Series:~/workspace/bosh-lite/cf-release$ 
+
+
+

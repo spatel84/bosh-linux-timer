@@ -1,0 +1,238 @@
+API endpoint:   https://api.bosh-lite.com (API version: 2.63.0)
+Not logged in. Use 'cf login' to log in.
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ cf login https://api.bosh-lite.com
+API endpoint: https://api.bosh-lite.com
+
+Email> admin
+
+Password> 
+Authenticating...
+OK
+
+
+                
+API endpoint:   https://api.bosh-lite.com (API version: 2.63.0)
+User:           admin
+No org or space targeted, use 'cf target -o ORG -s SPACE'
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ cf create-org me
+Creating org me as admin...
+OK
+
+Assigning role OrgManager to user admin in org me ...
+OK
+
+TIP: Use 'cf target -o me' to target new org
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ cf create-space development
+FAILED
+No org targeted, use 'cf target -o ORG' to target an org.
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ cf target -o me
+                
+API endpoint:   https://api.bosh-lite.com (API version: 2.63.0)
+User:           admin
+Org:            me
+Space:          No space targeted, use 'cf target -s SPACE'
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ cf create-space development
+Creating space development in org me as admin...
+OK
+Assigning role RoleSpaceManager to user admin in org me / space development as admin...
+OK
+Assigning role RoleSpaceDeveloper to user admin in org me / space development as admin...
+OK
+
+TIP: Use 'cf target -o "me" -s "development"' to target new space
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ cf target -o me -s development
+                
+API endpoint:   https://api.bosh-lite.com (API version: 2.63.0)
+User:           admin
+Org:            me
+Space:          development
+shilpen@shilpen-All-Series:~/workspace/bosh-lite$ cd 
+shilpen@shilpen-All-Series:~$ ls
+Desktop           mongodb-mms-monitoring-agent_2.1.0.35-1_amd64.deb  notes-bosh.txt  spiff         terminal_log_2  VirtualBox VMs
+Documents         Music                                              Pictures        Templates     Ubuntu One      workspace
+examples.desktop  notes2                                             Public          terminal_log  Videos
+shilpen@shilpen-All-Series:~$ cd workspace/
+shilpen@shilpen-All-Series:~/workspace$ ls
+bosh-lite  HelloWorld  RobotMaze
+shilpen@shilpen-All-Series:~/workspace$ mkdir -p RubyHelloWorld
+shilpen@shilpen-All-Series:~/workspace$ cd RubyHelloWorld
+shilpen@shilpen-All-Series:~/workspace/RubyHelloWorld$ vi Gemfile
+shilpen@shilpen-All-Series:~/workspace/RubyHelloWorld$ ls -lrth
+total 4.0K
+-rw-rw-r-- 1 shilpen shilpen 53 Oct 29 21:48 Gemfile
+shilpen@shilpen-All-Series:~/workspace/RubyHelloWorld$ vi hello.rb
+shilpen@shilpen-All-Series:~/workspace/RubyHelloWorld$ vi config.ru
+shilpen@shilpen-All-Series:~/workspace/RubyHelloWorld$ sudo gem install bundler
+[sudo] password for shilpen: 
+Fetching: bundler-1.13.6.gem (100%)
+Successfully installed bundler-1.13.6
+Parsing documentation for bundler-1.13.6
+Installing ri documentation for bundler-1.13.6
+Done installing documentation for bundler after 4 seconds
+1 gem installed
+shilpen@shilpen-All-Series:~/workspace/RubyHelloWorld$ bundle
+Fetching gem metadata from http://rubygems.org/..........
+Fetching version metadata from http://rubygems.org/.
+Resolving dependencies...
+Installing rack 1.6.4
+Installing tilt 2.0.5
+Using bundler 1.13.6
+Installing rack-protection 1.5.3
+Installing sinatra 1.4.7
+Bundle complete! 1 Gemfile dependency, 5 gems now installed.
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+shilpen@shilpen-All-Series:~/workspace/RubyHelloWorld$ ./hello.rb
+bash: ./hello.rb: Permission denied
+shilpen@shilpen-All-Series:~/workspace/RubyHelloWorld$ ls -lrth
+total 16K
+-rw-rw-r-- 1 shilpen shilpen  53 Oct 29 21:48 Gemfile
+-rw-rw-r-- 1 shilpen shilpen  61 Oct 29 21:48 hello.rb
+-rw-rw-r-- 1 shilpen shilpen  55 Oct 29 21:49 config.ru
+-rw-rw-r-- 1 shilpen shilpen 279 Oct 29 21:50 Gemfile.lock
+shilpen@shilpen-All-Series:~/workspace/RubyHelloWorld$ cf push hello-world
+Creating app hello-world in org me / space development as admin...
+OK
+
+Creating route hello-world.bosh-lite.com...
+OK
+
+Binding hello-world.bosh-lite.com to hello-world...
+OK
+
+Uploading hello-world...
+Uploading app files from: /home/shilpen/workspace/RubyHelloWorld
+Uploading 840B, 4 files
+Done uploading               
+OK
+
+Starting app hello-world in org me / space development as admin...
+-----> Downloaded app package (4.0K)
+-------> Buildpack version 1.6.26
+       Downloaded [file:///var/vcap/data/dea_next/admin_buildpacks/3bfda192-134f-44b9-bfe3-e44d6c99955b_9a7c925a1915f43054600c91698dbae7a30f4a91/dependencies/https___buildpacks.cloudfoundry.org_concourse-binaries_bundler_bundler-1.13.1.tgz]
+-----> Compiling Ruby/Rack
+       Downloaded [file:///var/vcap/data/dea_next/admin_buildpacks/3bfda192-134f-44b9-bfe3-e44d6c99955b_9a7c925a1915f43054600c91698dbae7a30f4a91/dependencies/https___buildpacks.cloudfoundry.org_concourse-binaries_ruby_ruby-2.3.1-linux-x64.tgz]
+-----> Using Ruby version: ruby-2.3.1
+-----> Installing dependencies using bundler 1.13.1
+       Running: bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment
+       Warning: the running version of Bundler (1.13.1) is older than the version that created the lockfile (1.13.6). We suggest you upgrade to the latest version of Bundler by running `gem install bundler`.
+       Fetching gem metadata from http://rubygems.org/.........
+       Fetching version metadata from http://rubygems.org/.
+       Using bundler 1.13.1
+       Installing tilt 2.0.5
+       Installing rack 1.6.4
+       Installing rack-protection 1.5.3
+       Installing sinatra 1.4.7
+       Bundle complete! 1 Gemfile dependency, 5 gems now installed.
+       Gems in the groups development and test were not installed.
+       Bundled gems are installed into ./vendor/bundle.
+       Bundle completed (5.70s)
+       Cleaning up the bundler cache.
+       Warning: the running version of Bundler (1.13.1) is older than the version that created the lockfile (1.13.6). We suggest you upgrade to the latest version of Bundler by running `gem install bundler`.
+###### WARNING:
+       You have not declared a Ruby version in your Gemfile.
+       To set your Ruby version add this line to your Gemfile:
+       ruby '2.3.1'
+       # See http://docs.cloudfoundry.org/buildpacks/ruby/index.html#runtime for more information.
+
+-----> Uploading droplet (19M)
+
+1 of 1 instances running
+
+App started
+
+
+OK
+
+App hello-world was started using this command `bundle exec rackup config.ru -p $PORT`
+
+Showing health and status for app hello-world in org me / space development as admin...
+OK
+
+requested state: started
+instances: 1/1
+usage: 256M x 1 instances
+urls: hello-world.bosh-lite.com
+last uploaded: Sat Oct 29 20:52:26 UTC 2016
+stack: cflinuxfs2
+buildpack: ruby 1.6.26
+
+     state     since                    cpu    memory        disk      details
+#0   running   2016-10-29 09:54:09 PM   0.0%   47M of 256M   0 of 1G
+shilpen@shilpen-All-Series:~/workspace/RubyHelloWorld$ ls -lrth
+total 16K
+-rw-rw-r-- 1 shilpen shilpen  53 Oct 29 21:48 Gemfile
+-rw-rw-r-- 1 shilpen shilpen  61 Oct 29 21:48 hello.rb
+-rw-rw-r-- 1 shilpen shilpen  55 Oct 29 21:49 config.ru
+-rw-rw-r-- 1 shilpen shilpen 279 Oct 29 21:50 Gemfile.lock
+shilpen@shilpen-All-Series:~/workspace/RubyHelloWorld$ vi hello.rb
+shilpen@shilpen-All-Series:~/workspace/RubyHelloWorld$ cf push hello-world-update
+Creating app hello-world-update in org me / space development as admin...
+OK
+
+Creating route hello-world-update.bosh-lite.com...
+OK
+
+Binding hello-world-update.bosh-lite.com to hello-world-update...
+OK
+
+Uploading hello-world-update...
+Uploading app files from: /home/shilpen/workspace/RubyHelloWorld
+Uploading 852B, 4 files
+Done uploading               
+OK
+
+Starting app hello-world-update in org me / space development as admin...
+-----> Downloaded app package (4.0K)
+-------> Buildpack version 1.6.26
+       Downloaded [file:///var/vcap/data/dea_next/admin_buildpacks/3bfda192-134f-44b9-bfe3-e44d6c99955b_9a7c925a1915f43054600c91698dbae7a30f4a91/dependencies/https___buildpacks.cloudfoundry.org_concourse-binaries_bundler_bundler-1.13.1.tgz]
+-----> Compiling Ruby/Rack
+       Downloaded [file:///var/vcap/data/dea_next/admin_buildpacks/3bfda192-134f-44b9-bfe3-e44d6c99955b_9a7c925a1915f43054600c91698dbae7a30f4a91/dependencies/https___buildpacks.cloudfoundry.org_concourse-binaries_ruby_ruby-2.3.1-linux-x64.tgz]
+-----> Using Ruby version: ruby-2.3.1
+-----> Installing dependencies using bundler 1.13.1
+       Running: bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin -j4 --deployment
+       Warning: the running version of Bundler (1.13.1) is older than the version that created the lockfile (1.13.6). We suggest you upgrade to the latest version of Bundler by running `gem install bundler`.
+       Fetching gem metadata from http://rubygems.org/.........
+       Fetching version metadata from http://rubygems.org/.
+       Using bundler 1.13.1
+       Installing rack 1.6.4
+       Installing rack-protection 1.5.3
+       Installing tilt 2.0.5
+       Installing sinatra 1.4.7
+       Bundle complete! 1 Gemfile dependency, 5 gems now installed.
+       Gems in the groups development and test were not installed.
+       Bundled gems are installed into ./vendor/bundle.
+       Bundle completed (3.36s)
+       Cleaning up the bundler cache.
+       Warning: the running version of Bundler (1.13.1) is older than the version that created the lockfile (1.13.6). We suggest you upgrade to the latest version of Bundler by running `gem install bundler`.
+###### WARNING:
+       You have not declared a Ruby version in your Gemfile.
+       To set your Ruby version add this line to your Gemfile:
+       ruby '2.3.1'
+       # See http://docs.cloudfoundry.org/buildpacks/ruby/index.html#runtime for more information.
+
+-----> Uploading droplet (19M)
+
+1 of 1 instances running
+
+App started
+
+
+OK
+
+App hello-world-update was started using this command `bundle exec rackup config.ru -p $PORT`
+
+Showing health and status for app hello-world-update in org me / space development as admin...
+OK
+
+requested state: started
+instances: 1/1
+usage: 256M x 1 instances
+urls: hello-world-update.bosh-lite.com
+last uploaded: Sat Oct 29 20:57:33 UTC 2016
+stack: cflinuxfs2
+buildpack: ruby 1.6.26
+
+     state     since                    cpu    memory          disk      details
+#0   running   2016-10-29 09:57:56 PM   0.0%   48.9M of 256M   0 of 1G
+shilpen@shilpen-All-Series:~/workspace/RubyHelloWorld$ 
+

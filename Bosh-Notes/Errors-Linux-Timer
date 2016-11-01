@@ -1,0 +1,269 @@
+https://github.com/georgethebeatle/simple-bosh-release
+
+shilpen@shilpen-All-Series:~/workspace$ bosh init release my-bosh-release
+Release directory initialized
+shilpen@shilpen-All-Series:~/workspace$ find my-bosh-release
+my-bosh-release
+my-bosh-release/config
+my-bosh-release/config/blobs.yml
+my-bosh-release/packages
+my-bosh-release/jobs
+my-bosh-release/src
+my-bosh-release/blobs
+
+
+Added package into the sources:
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release/src$ ls -lrth
+total 1.9M
+-rw-rw-r-- 1 shilpen shilpen 1.9M Oct 30 11:44 timer-linux
+
+
+bosh generate package linux-timer
+create	packages/linux-timer
+create	packages/linux-timer/packaging
+create	packages/linux-timer/pre_packaging
+create	packages/linux-timer/spec
+
+Generated skeleton for 'linux-timer' package in 'packages/linux-timer'
+
+
+fill out the spec file
+config packaging script
+/home/shilpen/workspace/my-bosh-release/packages/linux-timer/packaging
+
+# abort script on any command that exits with a non zero value
+set -e -x
+
+echo "Set permissions to execute linux-timer and copy to install dir"
+(
+        chmod 775 linux-timer
+        cp timer-linux ${BOSH_INSTALL_TARGET}
+)
+
+
+bosh generate job linux-timer
+create jobs/linux-timer
+create jobs/linux-timer/templates
+create jobs/linux-timer/spec
+create jobs/linux-timer/monit
+
+#!/bin/bash
+
+JOB=linux-timer
+RUN_DIR=/var/vcap/sys/run/linux-timer
+LOG_DIR=/var/vcap/sys/log/linux-timer
+LOGFILE=$LOG_DIR/linux-timer.log
+PIDFILE=$RUN_DIR/linux-timer.pid
+CONFIG=/var/vcap/jobs/$JOB/config
+TIMERCTL=/var/vcap/packages/linux-timer
+
+start-timer() {
+        mkdir -p $RUN_DIR
+        mkdir -p $LOG_DIR
+
+        $TIMERCTL >> $LOGFILE 2>&1
+}
+
+stop-timer() {
+        pkill -f "linux-timer"
+}
+
+case $1 in
+
+        start)  start-timer;;
+        stop)   stop-timer;;
+        restart)        stop-timer; start-timer;;
+        *) echo "usage: ${JOB}_ctl start|stop|restart";;
+esac
+exit 0
+~                                 
+
+bosh create release
+
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release$ bosh create release
+[WARNING] Missing blobstore configuration, please update config/final.yml before making a final release
+Syncing blobs...
+
+Building DEV release
+---------------------------------
+Release artifact cache: /home/shilpen/.bosh/cache
+
+Building license
+----------------
+Building license...
+  Warning: Missing LICENSE or NOTICE in /home/shilpen/workspace/my-bosh-release
+
+
+Building packages
+-----------------
+Building linux-timer...
+  Using dev version '2beb78b051737900bd2893d74a008b02d53fe8b2'
+
+
+Resolving dependencies
+----------------------
+Dependencies resolved, correct build order is:
+- linux-timer
+
+
+Building jobs
+-------------
+Building linux-timer...
+  No artifact found for linux-timer
+  Generating...
+  Generated version 'd1392e5aefd1cb6cd626ce442e1a06ccea248f38'
+
+
+Building release
+----------------
+
+Generating manifest...
+----------------------
+Writing manifest...
+
+Release summary
+---------------
+Packages
++-------------+------------------------------------------+-------+
+| Name        | Version                                  | Notes |
++-------------+------------------------------------------+-------+
+| linux-timer | 2beb78b051737900bd2893d74a008b02d53fe8b2 |       |
++-------------+------------------------------------------+-------+
+
+Jobs
++-------------+------------------------------------------+-------------+
+| Name        | Version                                  | Notes       |
++-------------+------------------------------------------+-------------+
+| linux-timer | d1392e5aefd1cb6cd626ce442e1a06ccea248f38 | new version |
++-------------+------------------------------------------+-------------+
+
+Jobs affected by changes in this release
++-------------+------------------------------------------+
+| Name        | Version                                  |
++-------------+------------------------------------------+
+| linux-timer | d1392e5aefd1cb6cd626ce442e1a06ccea248f38 |
++-------------+------------------------------------------+
+
+Release name: my-bosh-release
+Release version: 0+dev.1
+Release manifest: /home/shilpen/workspace/my-bosh-release/dev_releases/my-bosh-release/my-bosh-release-0+dev.1.yml
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release$ bosh upload release
+Acting as user 'admin' on 'Bosh Lite Director'
+[WARNING] Missing blobstore configuration, please update config/final.yml before making a final release
+
+Copying packages
+----------------
+linux-timer
+
+
+Copying jobs
+------------
+linux-timer
+
+Generated /tmp/d20161101-5948-1ke6rw0/d20161101-5948-3yuzoi/release.tgz
+Release size: 1.1M
+
+Verifying manifest...
+Extract manifest                                             OK
+Manifest exists                                              OK
+Release name/version                                         OK
+
+
+Uploading release
+release.tgz:    96% |ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo    |   1.1MB   5.5MB/s ETA:  00:00:00
+Director task 24
+  Started extracting release > Extracting release. Done (00:00:00)
+
+  Started verifying manifest > Verifying manifest. Done (00:00:00)
+
+  Started resolving package dependencies > Resolving package dependencies. Done (00:00:00)
+
+  Started creating new packages > linux-timer/2beb78b051737900bd2893d74a008b02d53fe8b2. Done (00:00:00)
+
+  Started creating new jobs > linux-timer/d1392e5aefd1cb6cd626ce442e1a06ccea248f38. Done (00:00:00)
+
+  Started release has been created > my-bosh-release/0+dev.1. Done (00:00:00)
+
+Task 24 done
+
+Started		2016-11-01 01:44:37 UTC
+Finished	2016-11-01 01:44:37 UTC
+Duration	00:00:00
+release.tgz:    96% |ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo    |   1.1MB 852.9KB/s Time: 00:00:01
+
+Release uploaded
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release$ bosh deployment deployments/warden.yml
+Missing manifest for 'deployments/warden.yml'
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release$ bosh deployments
+Acting as user 'admin' on 'Bosh Lite Director'
+
++-----------+--------------+----------------------------------------------------+--------------+
+| Name      | Release(s)   | Stemcell(s)                                        | Cloud Config |
++-----------+--------------+----------------------------------------------------+--------------+
+| cf-warden | cf/245+dev.1 | bosh-warden-boshlite-ubuntu-trusty-go_agent/3262.2 | none         |
++-----------+--------------+----------------------------------------------------+--------------+
+
+Deployments total: 1
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release$ bosh releases
+Acting as user 'admin' on 'Bosh Lite Director'
+
++-----------------+------------+-------------+
+| Name            | Versions   | Commit Hash |
++-----------------+------------+-------------+
+| cf              | 245+dev.1* | 1a84cd71    |
+| my-bosh-release | 0+dev.1    | 00000000    |
++-----------------+------------+-------------+
+(*) Currently deployed
+
+Releases total: 2
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release$ bosh status --uuid
+fb70f16a-4d6f-41f8-bc2e-0181a03dff18
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release$ bosh deployment /home/shilpen/workspace/my-bosh-release/dev_releases/my-bosh-release/my-bosh-release-0+dev.1.yml
+
+shilpen@shilpen-All-Series:~/workspace/my-bosh-release$ bosh deploy
+Acting as user 'admin' on deployment 'my-bosh-release' on 'Bosh Lite Director'
+Getting deployment properties from director...
+
+Detecting deployment changes
+----------------------------
+releases:
+- name: my-bosh-release
+  version: ''
+
+jobs:
+- name: linux-timer
+  version: d1392e5aefd1cb6cd626ce442e1a06ccea248f38
+  fingerprint: d1392e5aefd1cb6cd626ce442e1a06ccea248f38
+  sha1: 1d74a597acc0a9d8b7c2b3ce8ad40e89850796b4
+
+packages:
+- name: linux-timer
+  version: 2beb78b051737900bd2893d74a008b02d53fe8b2
+  fingerprint: 2beb78b051737900bd2893d74a008b02d53fe8b2
+  sha1: 1792888c81a0637ac13e2ad6cfcc8c2c9dac9983
+  dependencies: []
+
+commit_hash: '00000000'
+
+uncommitted_changes: false
+
+name: my-bosh-release
+
+version: 0+dev.1
+
+director_uuid: fb70f16a-4d6f-41f8-bc2e-0181a03dff18
+Please review all changes carefully
+
+Deploying
+---------
+Are you sure you want to deploy? (type 'yes' to continue): yes
+
+Director task 26
+  Started preparing deployment > Preparing deployment. Failed: Required property 'networks' was not specified in object ({}) (00:00:00)
+
+Error 40001: Required property 'networks' was not specified in object ({})
+
+Task 26 error
+
+
+
