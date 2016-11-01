@@ -1,0 +1,27 @@
+---
+releases:
+- name: my-bosh-release
+  version: latest
+packages:
+- name: linux-timer
+  version: 2beb78b051737900bd2893d74a008b02d53fe8b2
+  fingerprint: 2beb78b051737900bd2893d74a008b02d53fe8b2
+  sha1: 1792888c81a0637ac13e2ad6cfcc8c2c9dac9983
+  dependencies: []
+jobs:
+- name: linux-timer
+  version: d1392e5aefd1cb6cd626ce442e1a06ccea248f38
+  fingerprint: d1392e5aefd1cb6cd626ce442e1a06ccea248f38
+  sha1: 1d74a597acc0a9d8b7c2b3ce8ad40e89850796b4
+  templates:
+  - name: linux-timer
+  instances: 1
+  resorce_pool: default
+  networks:
+  - name: default
+    static_ips: [10.244.0.10]
+commit_hash: '00000000'
+uncommitted_changes: false
+name: my-bosh-release
+version: 0+dev.1
+director_uuid: fb70f16a-4d6f-41f8-bc2e-0181a03dff18

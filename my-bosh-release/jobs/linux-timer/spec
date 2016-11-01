@@ -1,0 +1,7 @@
+---
+name: linux-timer
+templates:
+ linux-timer_ctl.erb: bin/linux-timer_ctl
+
+packages:
+ - linux-timer

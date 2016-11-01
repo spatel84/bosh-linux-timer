@@ -1,0 +1,29 @@
+#!/bin/bash
+
+JOB=linux-timer
+RUN_DIR=/var/vcap/sys/run/linux-timer
+LOG_DIR=/var/vcap/sys/log/linux-timer
+LOGFILE=$LOG_DIR/linux-timer.log
+PIDFILE=$RUN_DIR/linux-timer.pid
+CONFIG=/var/vcap/jobs/$JOB/config
+TIMERCTL=/var/vcap/packages/linux-timer
+
+start-timer() {
+        mkdir -p $RUN_DIR
+        mkdir -p $LOG_DIR
+
+        $TIMERCTL >> $LOGFILE 2>&1
+}
+
+stop-timer() {
+        pkill -f "linux-timer"
+}
+
+case $1 in
+
+        start)  start-timer;;
+        stop)   stop-timer;;
+        restart)        stop-timer; start-timer;;
+        *) echo "usage: ${JOB}_ctl start|stop|restart";;
+esac
+exit 0

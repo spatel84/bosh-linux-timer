@@ -1,0 +1,5 @@
+check process linux-timer
+	with pidfile /var/vcap/sys/run/linux-timer/linux-timer.pid
+	start program "/var/vcap/jobs/linux-timer/bin/linux-timer_ctl start" with timeout 60 seconds
+	stop program "/var/vcap/jobs/linux-timer/bin/linux-timer_ctl stop" with timeout 60 seconds
+	group vcap

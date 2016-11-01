@@ -1,0 +1,8 @@
+# abort script on any command that exits with a non zero value
+set -e -x
+
+echo "uncompress and Set permissions to execute linux-timer and copy to install dir"
+
+tar xzf linux-timer.tar.gz
+chmod 775 linux-timer
+cp linux-timer ${BOSH_INSTALL_TARGET}
